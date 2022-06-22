@@ -29,13 +29,48 @@ def glass_door(job_title, location):
     browser = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
     browser.get(url)
     soup = BeautifulSoup(browser.page_source, 'html.parser')
-    divs = soup.find_all('div', {'class': 'mt-std'})
+    # divs = soup.find_all('div', {'class': 'mt-std'})
+    divs = soup.find_all('div', {'class': 'meat'})
+    jobs = []
+    print(len(divs))
 
-    for item in divs:
-        try:
-            print('https://www.glassdoor.com' + item.a.get('href'))
-        except AttributeError:
-            print('no link')
+    # for item in divs:
+    #     jobs.append(glass_door_extract(item))
+
+    print(jobs)
+
+
+def glass_door_extract(item):
+
+    try:
+        title = item.find('p',{'class': 'css-forujw m-0'}).text
+    except AttributeError:
+        title = 'N/A'
+
+    try:
+        company = item.find('a', {'class': 'job-search-key-l2wjgv'}).span.text
+    except AttributeError:
+        company = 'N/A'
+
+    try:
+        location = item.find('div', {'class': 'companyLocation'}).text
+    except AttributeError:
+        location = 'N/A'
+
+    try:
+        date = item.find('span', {'class': 'date'}).text
+    except AttributeError:
+        date = 'N/A'
+
+    try:
+        link = 'https://www.glassdoor.com' + item.a.get('href')
+    except AttributeError:
+        link = 'N/A'
+
+
+    
+    return { 'title': title, 'company': company, 'location': location, 'date': date, 'link': link}
+   
 
 # print(indeed("data scientist", "New York"))
 
