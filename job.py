@@ -1,61 +1,96 @@
-import re
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
 
-
-def linkedin_scrape(search_term):
-
+def indeed(job_title, location):
+    url = "https://www.indeed.com/jobs?q=" + job_title + "&l=" + location + "&from=searchOnHP&redirected=1&vjk=676599852a737304"
     browser = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
-    browser.get('https://www.linkedin.com')
-
-    username = browser.find_element_by_id('session_key')
-    username.send_keys('ersi.xhangolli@cit.edu.al')
-    password = browser.find_element_by_id('session_password')
-    password.send_keys('Test123@')
-
-    login_button = browser.find_element_by_class_name('sign-in-form__submit-button')
-    login_button.click()
-
-    browser.get('https://www.linkedin.com/jobs/search/?keywords=' + search_term)
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
-    job = soup.find_all('div', {'class': 'base-card'})
-    job_title = []
-
-    for i in job:
-        job_title.append(re.sub(r'\s{2,}','', i.text.replace("\n", "")))
-
     
+    browser.get(url)
+    soup = BeautifulSoup(browser.page_source, 'html.parser')
+    divs = soup.find_all('div', {'class': 'cardOutline'})
 
-    # print({'jobs': job_title})
-     
 
-    job2 = browser.find_elements_by_class_name("job-card-list__title")
-    print(len(job2))
-    # comp_name = []
+    jobs = []
 
-    # for i in job2:
-    #     comp_name.append(i.text)
+    for item in divs:
+        jobs.append({
+            'title': item.find('h2').text,
+            'company': item.find('span', {'class': 'companyName'}).text,
+            'location': item.find('div', {'class': 'companyLocation'}).text,
+            'date': item.find('span', {'class': 'date'}).text,
+            'link': 'https://www.indeed.com' + item.a.get('href')
+        })
+    return jobs
 
-    # print({'comp name length': len(comp_name)})
-    # print({comp_name})
+def flex_jobs(job_title, location):
+    url = "https://www.flexjobs.com/search?search=" + job_title + "&location=" + location
+    browser = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
+    browser.get(url)
+    soup = BeautifulSoup(browser.page_source, 'html.parser')
 
-    # job3 = browser.find_element_by_class_name('job-card-container__metadata-item')
-    # loc_name = []
+    divs = soup.find_all('li', {'class': 'm-0'})
+    jobs = []
 
-    # for i in job3:
-    #     loc_name.append(i.text)
+    for item in divs:
+        jobs.append(flex_jobs_extract(item))
 
-    # print({'loc name length': len(loc_name)})
-    # print({loc_name})
+    return jobs
 
-    # comp_name.append(' ')
-    # comp_name.append(' ')
+def indeed_extract(item):
+    try:
+        title = item.find('h2').text
+    except AttributeError:
+        title = 'N/A'
 
-    # print(len(loc_name))
+    try:
+        company = item.find('span', {'class': 'companyName'}).text
+    except AttributeError:
+        company = 'N/A'
 
-linkedin_scrape('developer')
+    try:
+        location = item.find('div', {'class': 'companyLocation'}).text
+    except AttributeError:
+        location = 'N/A'
+
+    try:
+        date = item.find('span', {'class': 'date'}).text
+    except AttributeError:
+        date = 'N/A'
+
+    try:
+        link = "https://www.indeed.com" + item.a.get('href')
+    except AttributeError:
+        link = 'N/A'
+    
+    return {'title': title, 'company': company, 'location': location, 'date': date, 'link': link}
+
+
+
+def flex_jobs_extract(item):
+    try:
+        title = item.a.text
+    except AttributeError:
+        title = 'N/A'
+
+    try:
+        date = item.find('div', {'class': 'job-age'}).text.strip()
+    except AttributeError:
+        date = 'N/A'
+
+    try:
+        type = item.span.text
+    except AttributeError:
+        type = 'N/A'
+
+    try:
+        link = "https://www.flexjobs.com" + item.a.get('href')
+    except AttributeError:
+        link = 'N/A'
+
+    return {'title': title, 'date': date, 'type': type, 'link': link}
+
+
+
+
+# print(indeed("data scientist", "New York"))
+# print(flex_jobs("data scientist", "New York"))
