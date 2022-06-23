@@ -39,7 +39,7 @@ python -m pip install flask
 
 # run app
 1- source .venv/bin/activate
-2- python -m flask run
+2- python -m flask run -h localhost -p 3000
 
 
 
