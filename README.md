@@ -44,3 +44,5 @@ python -m pip install flask
 
 
 
+.venv
+__pycache__/
