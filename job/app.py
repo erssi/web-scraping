@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import driver
 from flask import Flask, request, jsonify
 import asyncio
 from bs4 import BeautifulSoup
@@ -33,7 +34,10 @@ def indeed(job_title, location):
     jobs = []
 
     for item in divs:
-        jobs.append(indeed_extract(item))
+        record = indeed_extract(item)
+        if record:
+            jobs.append(record)
+    browser.close()
     return jsonify(jobs)
 
 def flex_jobs(job_title, location):
@@ -46,7 +50,10 @@ def flex_jobs(job_title, location):
     jobs = []
 
     for item in divs:
-        jobs.append(flex_jobs_extract(item))
+        record = flex_jobs_extract(item)
+        if record:
+            jobs.append(record)
+    browser.close()
     return jsonify(jobs)
 
 def indeed_extract(item):
