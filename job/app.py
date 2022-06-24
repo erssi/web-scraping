@@ -1,4 +1,3 @@
-from lib2to3.pgen2 import driver
 from flask import Flask, request, jsonify
 import asyncio
 from bs4 import BeautifulSoup
