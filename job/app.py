@@ -1,13 +1,22 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+import asyncio
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
 app = Flask(__name__)
 
-@app.route("/job-scrape", methods=['POST'])
-def home():
-    print(flex_jobs('data scientist', 'new york'))
-    return "Hello World!"
+@app.route("/indeed-scrape", methods=['POST'])
+def indeed():
+    request_data = request.get_json()
+    indeedJobs = indeed(request_data["jobTitle"], request_data["location"])
+    return  indeedJobs
+
+
+@app.route("/flex-jobs-scrape", methods=['POST'])
+def flexJobs():
+    request_data = request.get_json()
+    flexJobs = flex_jobs(request_data["jobTitle"], request_data["location"])
+    return  flexJobs
 
 
 
@@ -25,7 +34,7 @@ def indeed(job_title, location):
 
     for item in divs:
         jobs.append(indeed_extract(item))
-    return jobs
+    return jsonify(jobs)
 
 def flex_jobs(job_title, location):
     url = "https://www.flexjobs.com/search?search=" + job_title + "&location=" + location
@@ -38,8 +47,7 @@ def flex_jobs(job_title, location):
 
     for item in divs:
         jobs.append(flex_jobs_extract(item))
-
-    return jobs
+    return jsonify(jobs)
 
 def indeed_extract(item):
     try:
