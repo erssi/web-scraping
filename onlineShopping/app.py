@@ -1,12 +1,26 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
 app = Flask(__name__)
 
-@app.route("online-shopping-scrape", methods=['POST'])
-def home():
-    return ali_expres_scrape('laptops')
+@app.route("amazon-scrape", methods=['POST'])
+def amazon():
+    request_data = request.get_json()
+    results = amazon_scrape(request_data['search'])
+    return results
+
+@app.route("ebay-scrape", methods=['POST'])
+def ebay():
+    request_data = request.get_json()
+    results = ebay_scrape(request_data['search'])
+    return results
+
+@app.route("ali-express-scrape", methods=['POST'])
+def ali_expres():
+    request_data = request.get_json()
+    results = ali_expres_scrape(request_data['search'])
+    return results
 
 
 def amazon_scrape(search_term):

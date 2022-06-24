@@ -9,14 +9,14 @@ app = Flask(__name__)
 def indeed():
     request_data = request.get_json()
     indeedJobs = indeed(request_data["jobTitle"], request_data["location"])
-    return  indeedJobs
+    return indeedJobs
 
 
 @app.route("/flex-jobs-scrape", methods=['POST'])
 def flexJobs():
     request_data = request.get_json()
     flexJobs = flex_jobs(request_data["jobTitle"], request_data["location"])
-    return  flexJobs
+    return flexJobs
 
 
 
