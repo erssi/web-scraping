@@ -11,6 +11,10 @@ export class JobService {
     getAll(where){
         return this.jobRepository.find(where);
     }
+
+    save(jobs){
+        return this.jobRepository.save(jobs);
+    }
     
     delete(user){
         return this.jobRepository.softRemove(user);

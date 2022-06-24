@@ -10,21 +10,21 @@ export enum ShoppingWebsite {
 @Entity('shopping')
 export class Shopping extends BasicEntity {
 
-    @Column()
+    @Column({nullable: true})
     description: string;
 
-    @Column()
+    @Column({nullable: true})
     price: number;
 
-    @Column()
+    @Column({nullable: true})
     rating: number;
 
-    @Column()
+    @Column({nullable: true})
     url: string;
 
-    @Column()
+    @Column({nullable: true})
     image: string;
 
-    @Column()
+    @Column({nullable: true})
     type: ShoppingWebsite
 }

@@ -13,6 +13,10 @@ export class ShoppingService {
         return this.shoppingRepository.find(where);
     }
 
+    save(shopping){
+        return this.shoppingRepository.save(shopping);
+    }
+
     delete(shopping){
         return this.shoppingRepository.softRemove(shopping);
     }
