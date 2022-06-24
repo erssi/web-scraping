@@ -4,19 +4,19 @@ from selenium import webdriver
 
 app = Flask(__name__)
 
-@app.route("amazon-scrape", methods=['POST'])
+@app.route("/amazon-scrape", methods=['POST'])
 def amazon():
     request_data = request.get_json()
     results = amazon_scrape(request_data['search'])
     return results
 
-@app.route("ebay-scrape", methods=['POST'])
+@app.route("/ebay-scrape", methods=['POST'])
 def ebay():
     request_data = request.get_json()
     results = ebay_scrape(request_data['search'])
     return results
 
-@app.route("ali-express-scrape", methods=['POST'])
+@app.route("/aliexpress-scrape", methods=['POST'])
 def ali_expres():
     request_data = request.get_json()
     results = ali_expres_scrape(request_data['search'])
@@ -29,7 +29,7 @@ def amazon_scrape(search_term):
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     amazonRecords = []
-    driver = webdriver.Chrome('C:/Users/User/Downloads/chromedriver')
+    driver = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
     driver.get(url)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     results = soup.find_all('div', {'data-component-type': 's-search-result'})
@@ -46,7 +46,7 @@ def ebay_scrape(search_term):
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     ebayRecords = []
-    driver = webdriver.Chrome('C:/Users/User/Downloads/chromedriver')
+    driver = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
     driver.get(url)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     results = soup.find_all('div', {'class': 's-item__info clearfix'})

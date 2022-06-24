@@ -14,10 +14,10 @@ export class Shopping extends BasicEntity {
     description: string;
 
     @Column({nullable: true})
-    price: number;
+    price: string;
 
     @Column({nullable: true})
-    rating: number;
+    rating: string;
 
     @Column({nullable: true})
     url: string;
