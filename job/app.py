@@ -24,13 +24,7 @@ def indeed(job_title, location):
     jobs = []
 
     for item in divs:
-        jobs.append({
-            'title': item.find('h2').text,
-            'company': item.find('span', {'class': 'companyName'}).text,
-            'location': item.find('div', {'class': 'companyLocation'}).text,
-            'date': item.find('span', {'class': 'date'}).text,
-            'link': 'https://www.indeed.com' + item.a.get('href')
-        })
+        jobs.append(indeed_extract(item))
     return jobs
 
 def flex_jobs(job_title, location):
@@ -89,16 +83,16 @@ def flex_jobs_extract(item):
         date = 'N/A'
 
     try:
-        type = item.span.text
+        location = item.span.text
     except AttributeError:
-        type = 'N/A'
+        location = 'N/A'
 
     try:
         link = "https://www.flexjobs.com" + item.a.get('href')
     except AttributeError:
         link = 'N/A'
 
-    return {'title': title, 'date': date, 'type': type, 'link': link}
+    return {'title': title, 'date': date, 'location': location, 'link': link}
 
 
 

@@ -119,7 +119,7 @@ def extract_amazon_record(item):
     except AttributeError:
         image = 'N/A'
 
-    return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url}
+    return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url, 'type': 'amazon'}
 
 def extract_ebay_record(item, image):
 
@@ -161,7 +161,7 @@ def extract_ebay_record(item, image):
     except AttributeError:
         image = 'N/A'
 
-    return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url}
+    return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url, 'type': 'ebay'}
 
 def extract_ali_expres_record(item):
 
@@ -192,6 +192,6 @@ def extract_ali_expres_record(item):
     except AttributeError:
         image = 'N/A'
     
-    return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url}
+    return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url, 'type': 'aliexpres'}
 
 
