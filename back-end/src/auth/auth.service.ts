@@ -41,9 +41,7 @@ export class AuthService {
         };
       }
 
-      async signup(user: RegisterUserDto) {
-        console.log({ user });
-        
+      async signup(user: RegisterUserDto) {        
         let createdUser: User;
     
         try {
