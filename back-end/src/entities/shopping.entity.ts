@@ -27,4 +27,7 @@ export class Shopping extends BasicEntity {
 
     @Column({nullable: true})
     type: ShoppingWebsite
+
+    @Column({nullable: true})
+    search: string;
 }

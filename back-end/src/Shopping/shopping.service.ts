@@ -9,8 +9,8 @@ export class ShoppingService {
     @InjectRepository(Shopping)
     private readonly shoppingRepository: Repository<Shopping>;
 
-    getAll(where){
-        return this.shoppingRepository.find(where);
+    getAll(where, order?){
+        return this.shoppingRepository.find({where, order});
     }
 
     save(shopping){
