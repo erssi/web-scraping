@@ -8,15 +8,15 @@ export class JobService {
     @InjectRepository(Job)
     private readonly jobRepository: Repository<Job>;
 
-    getAll(where){
-        return this.jobRepository.find(where);
+    getAll(where, order?){
+        return this.jobRepository.find({where, order});
     }
 
     save(jobs){
         return this.jobRepository.save(jobs);
     }
     
-    delete(user){
-        return this.jobRepository.softRemove(user);
+    delete(job){
+        return this.jobRepository.softRemove(job);
     }
 }

@@ -16,6 +16,12 @@ export class Job extends BasicEntity{
     @Column()
     location: string;
 
+    @Column({name: 'search_location'})
+    searchedLocation: string;
+
+    @Column({name: 'searched_title'})
+    searchedTitle: string;
+
     @Column({nullable: true})
     company: string;
 
