@@ -1,5 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { RegisterUserDto } from "src/auth/dto/register.dto";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 
@@ -9,11 +10,11 @@ export class UserService {
 private readonly userRepository: Repository<User>;
 
     getAll(where){
-        return this.userRepository.find(where);
+        return this.userRepository.find({where});
     }
 
     getOne(where){
-        return this.userRepository.findOne(where);
+        return this.userRepository.findOne({where});
     }
 
     update(id, updateData){
@@ -24,4 +25,16 @@ private readonly userRepository: Repository<User>;
         return this.userRepository.softRemove(user);
     }
 
+    register(body: RegisterUserDto) {
+        let savedUser;
+        try {
+          body.email = body.email.toLowerCase();
+          const user = this.userRepository.create(body);
+          savedUser = this.userRepository.save(user);
+        } catch (error) {
+          throw new HttpException(error.response, error.status);
+        }
+    
+        return savedUser;
+      }
 }
