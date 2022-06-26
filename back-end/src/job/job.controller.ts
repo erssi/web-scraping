@@ -1,14 +1,13 @@
-import { Controller, Get, HttpService, Inject, Query, UseGuards } from "@nestjs/common";
+import { Controller, Get, Inject, Query, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { SearchJobDto } from "./dto/searchJob.dto";
 import { JobService } from "./job.service";
+import axios from 'axios';
 
 @Controller('job')
 export class JobController {
     @Inject(JobService)
     public jobService: JobService;
-    @Inject(HttpService)
-    private readonly httpService: HttpService;
 
 
 
@@ -20,9 +19,28 @@ export class JobController {
             
             const savedJobs = await this.jobService.getAll({searchedTitle: query.jobTitle, searchedLocation: query.location}, {createdAt: 'DESC'});
             if(savedJobs?.length === 0 || savedJobs[0]?.createdAt.getDate() <= ( new Date().getDate() - 2)){
-                
-                const indeed = await this.httpService.post('http://localhost:4000/indeed-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
-                const flexjobs = await this.httpService.post('http://localhost:4000/flex-jobs-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
+               const indeed = await axios({
+                    method: 'post',
+                    url: 'http://localhost:4000/indeed-scrape',
+                    headers: {
+                        accept: 'application/json',
+                    },
+                    data: {
+                        jobTitle: query.jobTitle,
+                        location: query.location
+                    }
+               })
+               const flexjobs = await axios({
+                    method: 'post',
+                    url: 'http://localhost:4000/flex-jobs-scrape',
+                    headers: {
+                        accept: 'application/json',
+                    },
+                    data: {
+                        jobTitle: query.jobTitle,
+                        location: query.location
+                    }
+               }) 
                 
                 
                 jobs.push(...indeed.data);
@@ -44,7 +62,7 @@ export class JobController {
                 indeed: savedJobs.filter(job => job.searchedTitle === query.jobTitle && job.searchedLocation === query.location),
                 flexjobs: savedJobs.filter(job => job.searchedTitle === query.jobTitle && job.searchedLocation === query.location)
             };
-            } catch (error) {
+            } catch (error) {                
                 throw new Error('Something went wrong');
             }  
     }
@@ -53,8 +71,30 @@ export class JobController {
     async searchAll(@Query() query: SearchJobDto) {
     
         try {
-            const indeed = await this.httpService.post('http://localhost:4000/indeed-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
-            const flexjobs = await this.httpService.post('http://localhost:4000/flex-jobs-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
+            const indeed = await axios({
+                method: 'post',
+                url: 'http://localhost:4000/indeed-scrape',
+                headers: {
+                    accept: 'application/json',
+                },
+                data: {
+                    jobTitle: query.jobTitle,
+                    location: query.location
+                }
+            })
+            //  await this.httpService.post('http://localhost:4000/indeed-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
+            const flexjobs = await axios({
+                method: 'post',
+                url: 'http://localhost:4000/flex-jobs-scrape',
+                headers: {
+                    accept: 'application/json',
+                },
+                data: {
+                    jobTitle: query.jobTitle,
+                    location: query.location
+                }
+            })
+            // await this.httpService.post('http://localhost:4000/flex-jobs-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
                 
             const jobs = [];
             jobs.push(...indeed.data);
