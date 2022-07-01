@@ -46,3 +46,8 @@ python -m pip install flask
 
 .venv
 __pycache__/
+
+TODO
+docker
+.env.example
+contact us

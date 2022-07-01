@@ -1,15 +1,17 @@
 from flask import Flask, request, jsonify
-import asyncio
 from bs4 import BeautifulSoup
-from selenium import webdriver
+import requests
 
 app = Flask(__name__)
 
 @app.route("/indeed-scrape", methods=['POST'])
 def indeed():
-    request_data = request.get_json()
-    indeedJobs = indeed(request_data["jobTitle"], request_data["location"])
-    return indeedJobs
+    try:
+        request_data = request.get_json()
+        indeedJobs = indeed(request_data["jobTitle"], request_data["location"])
+        return indeedJobs
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 
 @app.route("/flex-jobs-scrape", methods=['POST'])
@@ -23,10 +25,9 @@ def flexJobs():
 
 def indeed(job_title, location):
     url = "https://www.indeed.com/jobs?q=" + job_title + "&l=" + location + "&from=searchOnHP&redirected=1&vjk=676599852a737304"
-    browser = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
+    browser = requests.get(url)
     
-    browser.get(url)
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
+    soup = BeautifulSoup(browser.text, 'html.parser')
     divs = soup.find_all('div', {'class': 'cardOutline'})
 
 
@@ -36,14 +37,13 @@ def indeed(job_title, location):
         record = indeed_extract(item)
         if record:
             jobs.append(record)
-    browser.close()
     return jsonify(jobs)
 
 def flex_jobs(job_title, location):
     url = "https://www.flexjobs.com/search?search=" + job_title + "&location=" + location
-    browser = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
-    browser.get(url)
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
+
+    browser = requests.get(url)
+    soup = BeautifulSoup(browser.text, 'html.parser')
 
     divs = soup.find_all('li', {'class': 'm-0'})
     jobs = []
@@ -52,7 +52,6 @@ def flex_jobs(job_title, location):
         record = flex_jobs_extract(item)
         if record:
             jobs.append(record)
-    browser.close()
     return jsonify(jobs)
 
 def indeed_extract(item):
@@ -110,3 +109,4 @@ def flex_jobs_extract(item):
 
 
 
+app.run(port=4000, debug=True, threaded=False, host= '0.0.0.0')

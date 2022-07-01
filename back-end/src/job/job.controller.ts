@@ -21,7 +21,7 @@ export class JobController {
             if(savedJobs?.length === 0 || savedJobs[0]?.createdAt.getDate() <= ( new Date().getDate() - 2)){
                const indeed = await axios({
                     method: 'post',
-                    url: 'http://localhost:4000/indeed-scrape',
+                    url: 'http://127.0.0.1:4000/indeed-scrape',
                     headers: {
                         accept: 'application/json',
                     },
@@ -32,7 +32,7 @@ export class JobController {
                })
                const flexjobs = await axios({
                     method: 'post',
-                    url: 'http://localhost:4000/flex-jobs-scrape',
+                    url: 'http://127.0.0.1:4000/flex-jobs-scrape',
                     headers: {
                         accept: 'application/json',
                     },
@@ -71,37 +71,45 @@ export class JobController {
     async searchAll(@Query() query: SearchJobDto) {
     
         try {
-            const indeed = await axios({
-                method: 'post',
-                url: 'http://localhost:4000/indeed-scrape',
-                headers: {
-                    accept: 'application/json',
-                },
-                data: {
-                    jobTitle: query.jobTitle,
-                    location: query.location
-                }
-            })
-            //  await this.httpService.post('http://localhost:4000/indeed-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
-            const flexjobs = await axios({
-                method: 'post',
-                url: 'http://localhost:4000/flex-jobs-scrape',
-                headers: {
-                    accept: 'application/json',
-                },
-                data: {
-                    jobTitle: query.jobTitle,
-                    location: query.location
-                }
-            })
-            // await this.httpService.post('http://localhost:4000/flex-jobs-scrape', {jobTitle: query.jobTitle, location: query.location}).toPromise();
+
+            let indeed;
+            let flexjobs;
+            
+            await Promise.all([
+                indeed = await axios({
+                    method: 'post',
+                    url: 'http://127.0.0.1:4000/indeed-scrape',
+                    headers: {
+                        accept: 'application/json',
+                    },
+                    data: {
+                        jobTitle: query.jobTitle,
+                        location: query.location
+                    }
+                }),
+                flexjobs = await axios({
+                    method: 'post',
+                    url: 'http://127.0.0.1:4000/flex-jobs-scrape',
+                    headers: {
+                        accept: 'application/json',
+                    },
+                    data: {
+                        jobTitle: query.jobTitle,
+                        location: query.location
+                    }
+                })
+            ]);
+
+
+            
+            
                 
             const jobs = [];
             jobs.push(...indeed.data);
             jobs.push(...flexjobs.data);
             jobs.forEach(job => {
-                job.searchedLocation = query.location;
-                job.searchedTitle = query.jobTitle;
+                    job.searchedLocation = query.location;
+                    job.searchedTitle = query.jobTitle;
             })
                 
             const savedJobs = await this.jobService.getAll({searchedTitle: query.jobTitle, searchedLocation: query.location}, {createdAt: 'DESC'});
@@ -114,7 +122,7 @@ export class JobController {
             }
                 
             return {indeed: indeed.data, flexjobs: flexjobs.data};
-        } catch (error) {
+        } catch (error) {            
             throw new Error('Something went wrong');
             
         }

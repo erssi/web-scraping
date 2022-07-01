@@ -1,0 +1,50 @@
+version: '3.8'
+services: 
+  db:
+    image: 'postgres:14.1-alpine'
+    restart: always
+
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_scrape
+      POSTGRES_USER: postgres
+  
+  # api:
+  #   depends_on:
+  #     - db
+  #   build:
+  #     context: ./back-end
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./back-end:/node_modules
+  #   environment:
+  #     TYPEORM_CONNECTION: postgresql
+  #     TYPEORM_HOST: db
+  #     TYPEORM_PORT: 5432
+  #     TYPEORM_USERNAME: postgres
+  #     TYPEORM_PASSWORD: postgres
+  #     TYPEORM_DATABASE: postgres
+  #     TYPEORM_SYNCHRONIZE: 'true'
+  #   ports:
+  #     - 3000:3000
+
+
+    
+    
+  job-scrape:
+    image: python:3.8
+    build:
+      context: ./job
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:4000:4000"
+
+  shopping:
+    image: python:3.8
+    build:
+      context: ./onlineShopping
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:4500:4500"

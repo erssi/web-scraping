@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import requests
 
 app = Flask(__name__)
 
@@ -29,16 +30,14 @@ def amazon_scrape(search_term):
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     amazonRecords = []
-    driver = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
-    driver.get(url)
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    browser = requests.get(url)
+    soup = BeautifulSoup(browser.text, 'html.parser')
     results = soup.find_all('div', {'data-component-type': 's-search-result'})
 
     for item in results:
         record = extract_amazon_record(item)
         if record: 
              amazonRecords.append(record)
-    driver.close()
     return jsonify(amazonRecords) 
 
 def ebay_scrape(search_term):
@@ -46,9 +45,8 @@ def ebay_scrape(search_term):
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     ebayRecords = []
-    driver = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
-    driver.get(url)
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    browser = requests.get(url)
+    soup = BeautifulSoup(browser.page_source, 'html.parser')
     results = soup.find_all('div', {'class': 's-item__info clearfix'})
     image = soup.find_all('img', {'class': 's-item__image-img'})
 
@@ -57,7 +55,6 @@ def ebay_scrape(search_term):
         record = extract_ebay_record(results[item], image[item])
         if record: 
             ebayRecords.append(record)
-    driver.close()
     return jsonify(ebayRecords)
 
 def ali_expres_scrape(search_term):
@@ -66,16 +63,14 @@ def ali_expres_scrape(search_term):
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     aliExpresRecords = []
-    driver = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
-    driver.get(url)
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    browser = requests.get(url)
+    soup = BeautifulSoup(browser.page_source, 'html.parser')
     results = soup.find_all('a', {'class': '_3t7zg _2f4Ho'})
        
     for item in results:
         record = extract_ali_expres_record(item)
         if record: 
             aliExpresRecords.append(record)
-    driver.close()
 
     return jsonify(aliExpresRecords)
 
@@ -195,3 +190,4 @@ def extract_ali_expres_record(item):
     return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url, 'type': 'aliexpres'}
 
 
+app.run(port=4500, debug=True, threaded=False, host= '0.0.0.0')

@@ -7,9 +7,9 @@ require('dotenv').config();
 
   host: 'localhost',
   port: 5432,
-  username: '',
-  password: '',
-  database: 'postgres',
+  username: 'postgres',
+  password: 'postgres',
+  database: 'postgres_scrape',
   autoLoadEntities: true,
   synchronize: true,
 
