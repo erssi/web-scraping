@@ -48,6 +48,6 @@ python -m pip install flask
 __pycache__/
 
 TODO
-docker
-.env.example
+docker √
+.env.example √
 contact us
