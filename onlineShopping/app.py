@@ -26,11 +26,21 @@ def ali_expres():
 
 def amazon_scrape(search_term):
     
-    template = 'https://amazon.com/s?k={}&sprefix=monitor%2Caps%2C178&ref=nb_sb_ss_ts-doa-p_2_7'
-    search_term = search_term.replace(' ', '+')
-    url = template.format(search_term)
+    url = 'https://amazon.com/s?k=' + search_term
     amazonRecords = []
-    browser = requests.get(url)
+    browser = requests.get(url,
+                             headers = {
+                                'authority': 'www.amazon.com',
+                                'pragma': 'no-cache',
+                                'cache-control': 'no-cache',
+                                'dnt': '1',
+                                'upgrade-insecure-requests': '1',
+                                'user-agent': 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36',
+                                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                                'sec-fetch-site': 'none',
+                                'sec-fetch-mode': 'navigate',
+                                'sec-fetch-dest': 'document',
+                                'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8'})
     soup = BeautifulSoup(browser.text, 'html.parser')
     results = soup.find_all('div', {'data-component-type': 's-search-result'})
 
@@ -45,8 +55,19 @@ def ebay_scrape(search_term):
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     ebayRecords = []
-    browser = requests.get(url)
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
+    browser = requests.get(url,headers = {
+                                'authority': 'www.amazon.com',
+                                'pragma': 'no-cache',
+                                'cache-control': 'no-cache',
+                                'dnt': '1',
+                                'upgrade-insecure-requests': '1',
+                                'user-agent': 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36',
+                                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                                'sec-fetch-site': 'none',
+                                'sec-fetch-mode': 'navigate',
+                                'sec-fetch-dest': 'document',
+                                'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8'})
+    soup = BeautifulSoup(browser.text, 'html.parser')
     results = soup.find_all('div', {'class': 's-item__info clearfix'})
     image = soup.find_all('img', {'class': 's-item__image-img'})
 
@@ -59,14 +80,17 @@ def ebay_scrape(search_term):
 
 def ali_expres_scrape(search_term):
 
-    template ='https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20220614113010&SearchText={}&spm=a2g0o.home.1000002.0'
+    template ='https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20220614113010&SearchText={}'
     search_term = search_term.replace(' ', '+')
     url = template.format(search_term)
     aliExpresRecords = []
-    browser = requests.get(url)
+
+    browser = webdriver.Chrome('/Users/ersixhangoli/Downloads/chromedriver')
+    browser.get(url)
     soup = BeautifulSoup(browser.page_source, 'html.parser')
+
     results = soup.find_all('a', {'class': '_3t7zg _2f4Ho'})
-       
+
     for item in results:
         record = extract_ali_expres_record(item)
         if record: 
@@ -190,4 +214,4 @@ def extract_ali_expres_record(item):
     return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url, 'type': 'aliexpres'}
 
 
-app.run(port=4500, debug=True, threaded=False, host= '0.0.0.0')
+app.run(port=4500, debug=True, threaded=False, host='0.0.0.0')

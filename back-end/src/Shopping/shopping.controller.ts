@@ -83,7 +83,6 @@ export class ShoppingController {
 
     @Get('/search')
     async searchAll(@Query() query: SearchShopDto) {
-        console.log('a');
         
         try{
           const amazon = await axios({
@@ -94,7 +93,6 @@ export class ShoppingController {
             },
             data: {search: query.search}
         })
-        console.log({amazon});
         
           const ebay = await axios({
             method: 'post',
@@ -104,18 +102,10 @@ export class ShoppingController {
             },
             data: {search: query.search}
         })
-          const aliExpres = await axios({
-            method: 'post',
-            url: 'http://127.0.0.1:4500/aliexpress-scrape',
-            headers: {
-                accept: 'application/json',
-            },
-            data: {search: query.search}
-        })
+          
           const shopping = [];
           shopping.push(...amazon.data);
           shopping.push(...ebay.data);
-          shopping.push(...aliExpres.data);
 
           shopping.forEach(item => {
               item.search = query.search;
@@ -129,12 +119,24 @@ export class ShoppingController {
             await this.shoppingService.delete(shopping);
             await this.shoppingService.save(shopping);
          }
-         return {amazon: amazon.data, ebay: ebay.data, aliExpres: aliExpres.data};
+         return {amazon: amazon.data, ebay: ebay.data};
 
         } catch (error) {
             return new Error('Something went wrong');
         }
 
+    }
+
+    @Get('/test')
+    async test(@Query() query: SearchShopDto) {
+        return (await axios({
+            method: 'post',
+            url: 'http://127.0.0.1:4500/aliexpress-scrape',
+            headers: {
+                accept: 'application/json',
+            },
+            data: {search: query.search}
+        })).data;
     }
 
 }

@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.9
 WORKDIR /onlineShopping/venv/bin/activate
 RUN python3 -m venv /opt/venv
 COPY . .

@@ -30,21 +30,24 @@ services:
   #   ports:
   #     - 3000:3000
 
-
-    
-    
   job-scrape:
     image: python:3.8
     build:
       context: ./job
       dockerfile: Dockerfile
     ports:
-      - "0.0.0.0:4000:4000"
+      - "4000:4000"
+    expose:
+      - "4000"
 
   shopping:
-    image: python:3.8
+    image: python:3.9
+    depends_on:
+      - job-scrape
     build:
       context: ./onlineShopping
       dockerfile: Dockerfile
     ports:
-      - "0.0.0.0:4500:4500"
+      - "4500:4500"
+    expose:
+      - "4500"
