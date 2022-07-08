@@ -1,8 +1,9 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import './SignIn.scss';
 export const SignIn = () => {
+  const navigate = useNavigate();
   const onFinish = (values: any) => {
     console.log('Success:', values);
   };
@@ -12,7 +13,7 @@ export const SignIn = () => {
   };
 
   return (
-    <>
+    <div className='sign-in'>
       <Form
         name='basic'
         labelCol={{ span: 8 }}
@@ -51,9 +52,17 @@ export const SignIn = () => {
             Submit
           </Button>
         </Form.Item>
+        <div className={'u__mt--2xl login__form--paragraph'}>
+          Don't have an account?
+          <Button
+            children={'Sign Up'}
+            className={'u__p'}
+            type={'link'}
+            title={'Sign Up'}
+            onClick={() => navigate('/sign-up')}
+          />
+        </div>
       </Form>
-
-      <Link to={'/sign-up'}>Sign Up</Link>
-    </>
+    </div>
   );
 };
