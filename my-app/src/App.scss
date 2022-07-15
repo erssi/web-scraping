@@ -6,13 +6,27 @@
   justify-content: center;
   align-items: center;
 }
-.search {
+.App {
+  width: 100%;
+  height: 93vh;
+  overflow-x: auto;
+  position: relative;
+}
+.opa {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  justify-content: space-between;
+}
+.search {
+  max-width: 300px;
+  width: 100%;
+  height: 950vh;
+  background: #ffffff;
+  padding: 20px;
+  margin-right: 100px;
   &-box {
     display: flex;
+    flex-direction: column;
+    gap: 20px;
     input {
       margin-right: 20px;
     }
@@ -29,12 +43,20 @@ ul {
 
 .search-container {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   gap: 30px;
 }
-.search-shopping__card {
-  max-width: 500px;
+.amazon {
+  max-width: 350px;
+
   width: 100%;
+  height: 350px;
+}
+.search-shopping__card {
+  max-width: 400px;
+  position: relative !important;
+  width: 100%;
+  height: 340px;
   margin: 20px auto !important;
   border-radius: 10px !important;
   box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5) !important;
@@ -79,10 +101,19 @@ ul {
     display: flex;
     justify-content: space-between;
   }
+
   &__footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: left;
+    position: absolute;
+    bottom: 5px;
+    width: 86%;
+    &--content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
+}
+
+.ant-card {
+  position: relative !important;
 }

@@ -1,6 +1,5 @@
-import { Card } from 'antd';
+import { Card, Rate } from 'antd';
 import React from 'react';
-
 interface Props {
   id: number;
   type: string;
@@ -41,19 +40,26 @@ const SearchShoppingItem = ({
               <p>{description} </p>
             </div>
             <div className='search-shopping__card__footer'>
-              {price !== 'N/A' && (
-                <span className='search-shopping__card--price'>
-                  Price {price}
-                </span>
-              )}
-              {rating !== 'N/A' && (
-                <span className='search-shopping__card--rating'>
-                  Rating {rating}
-                </span>
-              )}
-              <a href={url} target='_'>
-                Visit
-              </a>{' '}
+              <div className='search-shopping__card__footer--content'>
+                {' '}
+                {price !== 'N/A' && (
+                  <span className='search-shopping__card--price'>
+                    Price {price}
+                  </span>
+                )}
+                {rating !== 'N/A' && (
+                  <span className='search-shopping__card--rating'>
+                    <Rate
+                      allowHalf
+                      disabled={true}
+                      value={Number(rating?.slice(0, 3))}
+                    ></Rate>
+                  </span>
+                )}
+                <a href={url} target='_'>
+                  Visit
+                </a>{' '}
+              </div>
             </div>
           </Card>
         )}{' '}

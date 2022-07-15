@@ -1,6 +1,7 @@
-import { Button, Col, Form, Input, Row } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input } from 'antd';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { openNotification } from '../Home';
 import { confirmPasswordValidator } from './confirmPasswordValidator';
 import { formValidation } from './constant';
 
@@ -9,13 +10,28 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState<boolean>(false);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log(values);
+
+    try {
+      await fetch(`http://localhost:3001/auth/signup`, {
+        body: JSON.stringify(values),
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      openNotification('Succes', 'Account Succesfuly Added');
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onValuesChange = async () => {
     try {
       form.validateFields(['email']);
-      const email = form.getFieldValue('email');
+      // const email = form.getFieldValue('email');
 
       setValidationError(false);
     } catch (err) {
@@ -51,9 +67,9 @@ const SignUp = () => {
                     validateFirst={true}
                     rules={formValidation.email}
                     hasFeedback
+                    label={'Email'}
                   >
                     <Input
-                      // label={'Email address'}
                       placeholder={'Email address'}
                       onChange={onValuesChange}
                       type={'text'}
@@ -64,24 +80,18 @@ const SignUp = () => {
                     rules={formValidation.name}
                     validateFirst={true}
                     className={'u__mt--m'}
+                    label={'Full name'}
                   >
-                    <Input
-                      // label={'Full name'}
-                      placeholder={'Full name'}
-                      type={'text'}
-                    />
+                    <Input placeholder={'Full name'} type={'text'} />
                   </Form.Item>
                   <Form.Item
                     name={'password'}
                     rules={formValidation.password}
                     validateFirst={true}
+                    label={'Password'}
                     className={'u__mt--m'}
                   >
-                    <Input
-                      // label={'Password'}
-                      placeholder={'Password'}
-                      type={'password'}
-                    />
+                    <Input placeholder={'Password'} type={'password'} />
                   </Form.Item>
                   <Form.Item
                     name={'confirmPassword'}
@@ -91,17 +101,12 @@ const SignUp = () => {
                     ]}
                     validateFirst={true}
                     className={'u__mt--m'}
+                    label={'Confirm Password'}
                   >
                     <Input placeholder={'Confirm password'} type={'password'} />
                   </Form.Item>
                 </div>
-                <Form.Item
-                  name={'termsAndAgreements'}
-                  valuePropName='checked'
-                  // rules={formValidation.termsAndAgreements}
-                  validateFirst={true}
-                  className={'u__mt--m'}
-                ></Form.Item>
+
                 <Form.Item>
                   <Button
                     title={'Continue'}

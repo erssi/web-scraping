@@ -1,134 +1,81 @@
 import { Button, Card, notification, Select, Spin } from 'antd';
 // import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import '../App.scss';
 import SearchButton from '../components/SearchButton';
 import SearchShoppingItem from '../components/SearchShoppingItem';
+import { ApiService } from '../services/apiService';
+import { JobsItem, ShopingItem } from '../types/general';
 // import { searchService } from './services/SearchService';
+export const openNotification = (message: string, description: string) => {
+  notification.open({
+    message: message,
+    description: description,
 
+    // onClick: () => {
+    //   console.log('Notification Clicked!');
+    // },
+  });
+};
 function Home() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [items, setitems] = useState([]);
+  const [items, setitems] = useState({
+    amazon: [] as ShopingItem[],
+    ebay: [] as ShopingItem[],
+  });
   const [isLoading, setIsLoading] = useState(false);
   const { Option } = Select;
   const [dropdownValue, setDropdownValue] = useState('Shopping');
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState({
+    flexjobs: [] as JobsItem[],
+    indeed: [] as JobsItem[],
+  });
   const [location, setLocation] = useState('');
+  const accessToken = useSelector((state: any) => state.auth.token);
 
-  const openNotification = (message: string, description: string) => {
-    notification.open({
-      message: message,
-      description: description,
-
-      // onClick: () => {
-      //   console.log('Notification Clicked!');
-      // },
-    });
-  };
   const benRakia = async () => {
     setIsLoading(true);
+    try {
+      if (dropdownValue === 'Shopping') {
+        if (!searchQuery) {
+          return openNotification('Error', 'Please enter a search query !');
+        }
+        let res: any = null;
 
-    if (dropdownValue === 'Shopping') {
-      if (!searchQuery) {
-        return openNotification('Error', 'Please enter a search query !');
+        if (accessToken) {
+          res = await ApiService.get(
+            `shopping/search-login?search=${searchQuery}`
+          );
+        } else {
+          res = await ApiService.get(`shopping/search?search=${searchQuery}`);
+        }
+        setitems(res);
+      } else {
+        if (!searchQuery || !location) {
+          return openNotification(
+            'Error',
+            'Please enter a search query and location to search for jobs'
+          );
+        }
+        let res: any = null;
+        if (accessToken) {
+          res = await ApiService.get(
+            `job/search-login?jobTitle=${searchQuery}&location=${location}`
+          );
+        } else {
+          res = await ApiService.get(
+            `job/search?jobTitle=${searchQuery}&location=${location}`
+          );
+        }
+        setJobs({ ...res });
       }
-
-      await fetch(
-        `http://localhost:3001/shopping/search?search=${searchQuery}`,
-        {
-          method: 'GET',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then(async res => {
-          const a = await res.json();
-          return setitems(a.amazon.concat(a.ebay));
-        })
-        .catch(error => {
-          console.error(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-
-      await fetch(
-        `http://localhost:3001/shopping/search-login?search=${searchQuery}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: 'Bearer' + localStorage.getItem('token'),
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then(async res => {
-          const a = await res.json();
-          return setitems(a.amazon.concat(a.ebay));
-        })
-        .catch(error => {
-          console.error(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      if (!searchQuery || !location) {
-        return openNotification(
-          'Error',
-          'Please enter a search query and location to search for jobs'
-        );
-      }
-      await fetch(
-        `http://localhost:3001/job/search?jobTitle=${searchQuery}&location=${location}`,
-        {
-          method: 'GET',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then(async res => {
-          const a = await res.json();
-          return setJobs(a.indeed.concat(a.flexjobs));
-        })
-        .catch(error => {
-          console.error(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-
-      await fetch(
-        `http://localhost:3001/job/search-login?search=${searchQuery}&location=${location}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: 'Bearer' + localStorage.getItem('token'),
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then(async res => {
-          const a = await res.json();
-          return setJobs(a.indeed.concat(a.flexjobs));
-        })
-        .catch(error => {
-          console.error(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  console.log(jobs);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -149,8 +96,8 @@ function Home() {
     console.log(value);
     setDropdownValue(value);
 
-    setitems([]);
-    setJobs([]);
+    setitems({ amazon: [], ebay: [] });
+    setJobs({ flexjobs: [], indeed: [] });
   };
   const renderSelect = () => {
     return (
@@ -169,7 +116,7 @@ function Home() {
   };
 
   return (
-    <div className='App'>
+    <div className='opa'>
       <div className='search'>
         {' '}
         <h1>Ben Pijedashesi</h1>
@@ -184,11 +131,11 @@ function Home() {
               gap: '5px',
             }}
           >
-            {dropdownValue === 'Jobs' && (
-              <span style={{ whiteSpace: 'nowrap', margin: '0 5px' }}>
-                Job Title:{' '}
-              </span>
-            )}{' '}
+            <span style={{ whiteSpace: 'nowrap', margin: '0 5px' }}>
+              {dropdownValue === 'Shopping'
+                ? 'Shopping Item :'
+                : ' Job Title :'}
+            </span>
             <SearchButton onChange={onChange} onKeyPress={onKeyPress} />
           </div>
           {dropdownValue === 'Jobs' && (
@@ -209,48 +156,78 @@ function Home() {
             Serach
           </Button>
         </div>
-      </div>
-      {isLoading ? (
-        <div className='loader'>
-          <Spin />
-        </div>
-      ) : (
-        <div className='search-container'>
-          {dropdownValue === 'Shopping' && (
-            <>
-              {' '}
-              <div className='search-container__left'>
-                {items.map((item: any) => (
-                  <SearchShoppingItem {...item} shopType='amazon' />
-                ))}{' '}
-              </div>
-              <div className='search-container__right'>
-                {items.map((item: any) => (
-                  <SearchShoppingItem {...item} shopType='ebay' />
-                ))}{' '}
-              </div>
-            </>
-          )}
+      </div>{' '}
+      <div className='App'>
+        {isLoading ? (
+          <div className='loader'>
+            <Spin />
+          </div>
+        ) : (
+          <div className='search-container'>
+            {dropdownValue === 'Shopping' && (
+              <>
+                {items && (
+                  <>
+                    <div className='search-container__left'>
+                      {items?.amazon?.map(item => (
+                        <SearchShoppingItem
+                          {...item}
+                          shopType='amazon'
+                          key={item.id}
+                        />
+                      ))}{' '}
+                    </div>
+                    <div className='search-container__right'>
+                      {items?.ebay?.map(item => (
+                        <SearchShoppingItem
+                          {...item}
+                          shopType='ebay'
+                          key={item.id}
+                        />
+                      ))}{' '}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
 
-          {dropdownValue === 'Jobs' && (
-            <div className='jobs'>
-              {jobs.map((job: any) => (
-                <Card className='search-shopping__card'>
-                  <h1>{job.title}</h1>
-                  {job.company && <h3>{job.company}</h3>}
-                  <span>{job.date} </span>
-                  <br />
-                  <span>Location : {job.location}</span>
-                  <br />
-                  <a target={'_'} href={job.link}>
-                    Visit
-                  </a>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+            {dropdownValue === 'Jobs' && (
+              <>
+                <div className='jobs'>
+                  {jobs?.flexjobs?.map((job: any) => (
+                    <Card className='search-shopping__card'>
+                      <h1>{job.title}</h1>
+                      {job.company && <h3>{job.company}</h3>}
+                      <span>{job.date} </span>
+                      <br />
+                      <span>Location : {job.location}</span>
+                      <br />
+                      <a target={'_'} href={job.link}>
+                        Visit
+                      </a>
+                    </Card>
+                  ))}
+                </div>{' '}
+                <div className='jobs'>
+                  {jobs?.indeed?.map((job: any) => (
+                    <Card className='search-shopping__card'>
+                      <h1>{job.title}</h1>
+                      {job.company && <h3>{job.company}</h3>}
+                      <span>{job.date} </span>
+                      <br />
+                      <span>Location : {job.location}</span>
+                      <br />
+                      <a target={'_'} href={job.link}>
+                        Visit
+                      </a>
+                    </Card>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
