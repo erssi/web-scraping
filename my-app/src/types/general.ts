@@ -24,3 +24,10 @@ export interface JobsItem {
   title: string;
   updatedAt: string;
 }
+
+export interface formContact {
+  firstName: string;
+  lastName: string;
+  email: string;
+  message: string;
+}

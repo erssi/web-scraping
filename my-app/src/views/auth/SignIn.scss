@@ -2,9 +2,22 @@
 
 .sign-in {
   max-width: 500px;
-  max-height: 500px;
+  max-height: 600px;
   background: $white;
-  margin: 100px auto;
-  border: 1px solid rgb(0, 0, 0);
+  margin: 60px auto;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
+}
+
+.ant-form-item-label
+  > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+  content: '' !important;
+}
+.ant-form-item {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: start !important;
+}
+.ant-form-item-label {
+  text-align: left !important;
 }

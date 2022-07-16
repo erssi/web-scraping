@@ -10,7 +10,6 @@ import { openNotification } from '../../components/ToastNotifcation/Notification
 export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const onFinish = async (values: any) => {
     try {
       const res: any = await ApiService.post('auth/login', values);
@@ -27,14 +26,7 @@ export const SignIn = () => {
 
   return (
     <div className='sign-in'>
-      <Form
-        name='basic'
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        autoComplete='off'
-      >
+      <Form name='basic' onFinish={onFinish} autoComplete='off'>
         <Form.Item
           label='Email'
           name='email'
