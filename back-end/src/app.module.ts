@@ -7,10 +7,11 @@ import { UserModule } from './user/user.module';
 import { JobModule } from './job/job.module';
 import { ShoppingModule } from './Shopping/shopping.module';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(configOptions), UserModule, JobModule, ShoppingModule, AuthModule],
+  imports: [TypeOrmModule.forRoot(configOptions), UserModule, JobModule, ShoppingModule, AuthModule, MailModule],
   controllers: [AppController],
   providers: [AppService],
 })
