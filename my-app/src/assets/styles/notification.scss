@@ -1,0 +1,25 @@
+@use './variables' as *;
+
+.notification {
+  background-color: $gray-75;
+  border: 1px solid $gray-100;
+  border-radius: $border-s;
+
+  &__close-btn {
+    color: $gray-700;
+    font-size: $font-14;
+    font-weight: 600;
+  }
+
+  &__success {
+    background-color: #c1e0c1 !important;
+    border: 1px solid $gray-100 !important;
+    border-radius: $border-s !important;
+
+    .ant-notification-notice-description {
+      color: $black !important;
+      font-weight: bold !important;
+      font-size: 14px !important;
+    }
+  }
+}

@@ -1,5 +1,10 @@
+@use '../../assets/styles/variables' as *;
+
 .sign-in {
   max-width: 500px;
-  width: 100%;
-  margin: auto;
+  max-height: 500px;
+  background: $white;
+  margin: 100px auto;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 20px;
 }

@@ -1,0 +1,166 @@
+@use './variables' as *;
+
+@mixin flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin d-flex-justify-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin no-space {
+  margin: 0;
+  padding: 0;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-between {
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin label-font {
+  font-weight: 600;
+  font-size: $font-14;
+  line-height: 17px;
+}
+
+@mixin input-border {
+  border: 1px solid $gray-400;
+  border-radius: $space-s;
+}
+
+@mixin paragraph {
+  font-style: normal;
+  font-weight: normal;
+  font-size: $font-14;
+  line-height: $font-18;
+}
+
+@mixin join-btn($bg, $borderColor) {
+  border: 1px solid $borderColor;
+  background-color: $bg;
+  padding: $space-s $space-lg;
+  border-radius: $space-s;
+}
+
+@mixin profile-dropdown {
+  background: $white;
+  box-shadow: 0px 8px 8px $black-10;
+  border-radius: $space-s !important;
+  width: 186px !important;
+  min-width: 0 !important;
+}
+
+@mixin notification-dropdown {
+  background: $white;
+  box-shadow: 0 8px 8px $black-10;
+  border-radius: $border-m !important;
+  width: auto !important;
+  max-width: 500px;
+  min-width: 350px !important;
+}
+
+@mixin bg-pos-center {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@mixin text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin one-line-ellipses {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin three-line-ellipses {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+@mixin btn-primary {
+  width: 100%;
+  background: $gray-60;
+  border-radius: $space-s;
+  border: none;
+  height: 40px;
+
+  span {
+    font-style: normal;
+    font-weight: 600;
+    font-size: $font-14;
+    line-height: 17px;
+    text-align: center;
+    color: $black;
+  }
+
+  &:hover {
+    background: $gray-60;
+  }
+}
+
+@mixin btn-outline {
+  height: 40px;
+  border: 1px solid $blue-700;
+  border-radius: $border-s;
+  padding: $space-s $space-lg;
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: $font-14;
+  line-height: 17px;
+  color: $blue-700;
+}
+
+@mixin black-btn-filled {
+  background: #12151E;
+  border-radius: $border-s;
+  padding: $space-xl $space-2xl;
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-size: $font-18;
+  color: white;
+  font-weight: 700;
+  line-height: 22px;
+  border: 0;
+
+  &:hover {
+    border: 0;
+    color: white;
+    opacity: 0.7;
+    background: #414141;
+  }
+
+  &:focus {
+    border: 0;
+    color: white;
+    opacity: 0.7;
+    background: #414141;
+  }
+}
+
+@mixin bg-cover-center {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}

@@ -1,24 +1,14 @@
 import { Button, Card, notification, Select, Spin } from 'antd';
-// import axios from 'axios';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import '../App.scss';
-import SearchButton from '../components/SearchButton';
-import SearchShoppingItem from '../components/SearchShoppingItem';
-import { ApiService } from '../services/apiService';
-import { JobsItem, ShopingItem } from '../types/general';
-// import { searchService } from './services/SearchService';
-export const openNotification = (message: string, description: string) => {
-  notification.open({
-    message: message,
-    description: description,
+import '../../App.scss';
+import SearchButton from '../../components/SearchButton';
+import SearchShoppingItem from '../../components/SearchShoppingItem';
+import { openNotification } from '../../components/ToastNotifcation/Notification';
+import { ApiService } from '../../services/apiService';
+import { JobsItem, ShopingItem } from '../../types/general';
 
-    // onClick: () => {
-    //   console.log('Notification Clicked!');
-    // },
-  });
-};
 function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [items, setitems] = useState({
@@ -169,7 +159,7 @@ function Home() {
                 {items && (
                   <>
                     <div className='search-container__left'>
-                      {items?.amazon?.map(item => (
+                      {items?.amazon?.splice(0, 20).map(item => (
                         <SearchShoppingItem
                           {...item}
                           shopType='amazon'
@@ -178,7 +168,7 @@ function Home() {
                       ))}{' '}
                     </div>
                     <div className='search-container__right'>
-                      {items?.ebay?.map(item => (
+                      {items?.ebay?.splice(0, 20).map(item => (
                         <SearchShoppingItem
                           {...item}
                           shopType='ebay'

@@ -1,7 +1,8 @@
 import { Button, Form, Input } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { openNotification } from '../Home';
+import { openNotification } from '../../components/ToastNotifcation/Notification';
+import { ApiService } from '../../services/apiService';
 import { confirmPasswordValidator } from './confirmPasswordValidator';
 import { formValidation } from './constant';
 
@@ -11,21 +12,13 @@ const SignUp = () => {
   const [validationError, setValidationError] = useState<boolean>(false);
 
   const onFinish = async (values: any) => {
-    console.log(values);
-
     try {
-      await fetch(`http://localhost:3001/auth/signup`, {
-        body: JSON.stringify(values),
-        method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-        },
-      });
+      await ApiService.post('/auth/signup', values);
 
       openNotification('Succes', 'Account Succesfuly Added');
-    } catch (error) {
-      console.log(error);
+      navigate('/');
+    } catch (error: any) {
+      openNotification(`${error.status}`, `${error?.message}`);
     }
   };
   const onValuesChange = async () => {
@@ -66,7 +59,7 @@ const SignUp = () => {
                     name={'email'}
                     validateFirst={true}
                     rules={formValidation.email}
-                    hasFeedback
+                    // hasFeedback
                     label={'Email'}
                   >
                     <Input
