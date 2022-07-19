@@ -1,0 +1,74 @@
+.site-layout-content {
+  width: 100%;
+}
+.ant-layout-content {
+  overflow-x: auto;
+  height: 93.5vh;
+  padding: 0 !important;
+}
+.logo {
+  color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+  span {
+    color: #22b81c;
+  }
+}
+.navbar {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    &--menu {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}
+.navbar__dropdown {
+  background: none !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  padding: 5px 10px !important;
+  &:active,
+  :hover,
+  :focus {
+    outline: 0 !important;
+    color: #fff !important;
+    border-color: none !important;
+    border: none !important;
+  }
+}
+.ant-menu.ant-menu-dark,
+.ant-menu-item-selected {
+  background-color: transparent !important;
+}
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
+  background-color: transparent !important;
+}
+
+.ant-menu-vertical .ant-menu-item:not(:last-child),
+.ant-menu-vertical-left .ant-menu-item:not(:last-child),
+.ant-menu-vertical-right .ant-menu-item:not(:last-child),
+.ant-menu-inline .ant-menu-item:not(:last-child) {
+  margin-bottom: 5px !important;
+}
+html {
+  --antd-wave-shadow-color: none !important;
+  --scroll-bar: 0;
+}
+.ant-dropdown-menu {
+  padding: 5px 10px !important;
+  border-radius: 5px !important;
+}
+.ant-dropdown-menu-item {
+  padding: 5px 20px !important;
+  border-radius: 5px !important;
+}

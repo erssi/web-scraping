@@ -1,0 +1,9 @@
+@use '../../assets/styles/variables' as *;
+
+.contact {
+  background: $white;
+  margin: auto;
+  margin-top: 40px;
+  max-width: 500px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+}
