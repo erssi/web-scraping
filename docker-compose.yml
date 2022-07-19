@@ -51,3 +51,13 @@ services:
       - "4500:4500"
     expose:
       - "4500"
+
+  my-app:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    depends_on:
+      - shopping
+    ports:
+      - '3000:3000'
+
