@@ -1,10 +1,10 @@
 import { Injectable, Inject, UnauthorizedException, HttpException, HttpStatus } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { LoginDto } from "./dto/login.dto";
 import { User } from "src/entities/user.entity";
 import { RegisterUserDto } from "./dto/register.dto";
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -24,8 +24,9 @@ export class AuthService {
             data: ['Email does not exist!'],
           });
         }
-    
-        return user && (await bcrypt.compare(password, user.password))
+
+          return user && (user.password === crypto.pbkdf2Sync(password, 
+            user.salt, 1000, 64, `sha512`).toString(`hex`))
           ? user
           : null;
       }
@@ -58,7 +59,10 @@ export class AuthService {
               HttpStatus.UNPROCESSABLE_ENTITY,
             );
           }
-          user.password = await bcrypt.hash(user.password, 10);
+          const salt = crypto.randomBytes(16).toString('hex');
+          user.salt = salt;
+          user.password = crypto.pbkdf2Sync(user.password, salt,
+            1000, 64, `sha512`).toString(`hex`);          
           
     
           createdUser = await this.userService.register(user);

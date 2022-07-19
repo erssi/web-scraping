@@ -31,4 +31,6 @@ export class RegisterUserDto {
     @MinLength(6)
     @MaxLength(20)
     confirmPassword: string;
+
+    salt: string
 }
