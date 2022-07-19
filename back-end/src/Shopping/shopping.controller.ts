@@ -30,7 +30,6 @@ export class ShoppingController {
                 },
                 data: {search: query.search}
             })
-            //  await this.httpService.post('http://localhost:4500/amazon-scrape', {search: 'iphone 12'}).toPromise();
             const ebay = await axios({
                 method: 'post',
                 url: 'http://127.0.0.1::4500/ebay-scrape',
@@ -39,7 +38,6 @@ export class ShoppingController {
                 },
                 data: {search: query.search}
             })
-            // await this.httpService.post('http://localhost:4500/ebay-scrape', {search: 'iphone 12'}).toPromise();
             const aliExpres = await axios({
                 method: 'post',
                 url: 'http://127.0.0.1::4500/aliexpress-scrape',
@@ -48,7 +46,6 @@ export class ShoppingController {
                 },
                 data: {search: query.search}
             })
-            //  await this.httpService.post('http://localhost:4500/aliexpress-scrape', {search: 'iphone 12'}).toPromise();
            
             items.push(...amazon.data);
             items.push(...ebay.data);
