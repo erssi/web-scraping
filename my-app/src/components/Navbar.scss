@@ -1,8 +1,10 @@
 .site-layout-content {
   width: 100%;
+  overflow-x: auto !important;
+  height: 93.5vh;
 }
 .ant-layout-content {
-  overflow-x: auto;
+  overflow-x: auto !important;
   height: 93.5vh;
   padding: 0 !important;
 }
