@@ -45,7 +45,6 @@ export class ShoppingController {
 
         items.push(...amazon.data);
         items.push(...ebay.data);
-        // items.push(...aliExpres.data);
 
         items.forEach((item) => {
           item.search = query.search;
