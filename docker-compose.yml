@@ -9,6 +9,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres_scrape
       POSTGRES_USER: postgres
+
+
   api:
     depends_on:
       - db
@@ -29,6 +31,8 @@ services:
       TYPEORM_SYNCHRONIZE: 'true'
     ports:
       - 3001:3001
+
+
   job-scrape:
     image: python:3.8
     build:
@@ -36,6 +40,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 4000:4000
+
+
   shopping:
     image: python:3.9
     depends_on:
@@ -45,6 +51,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 4500:4500
+
+
   my-app:
     build:
       context: ./my-app
