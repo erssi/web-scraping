@@ -27,32 +27,24 @@ export class ShoppingController {
       ) {
         const amazon = await axios({
           method: 'post',
-          url: 'http://127.0.0.1:4500/amazon-scrape',
+          url: 'http://localhost:4500/amazon-scrape',
           headers: {
             accept: 'application/json',
           },
           data: { search: query.search },
         });
+
         const ebay = await axios({
           method: 'post',
-          url: 'http://127.0.0.1:4500/ebay-scrape',
+          url: 'http://localhost:4500/ebay-scrape',
           headers: {
             accept: 'application/json',
           },
           data: { search: query.search },
         });
-        // const aliExpres = await axios({
-        //   method: 'post',
-        //   url: 'http://127.0.0.1:4500/aliexpress-scrape',
-        //   headers: {
-        //     accept: 'application/json',
-        //   },
-        //   data: { search: query.search },
-        // });
 
         items.push(...amazon.data);
         items.push(...ebay.data);
-        // items.push(...aliExpres.data);
 
         items.forEach((item) => {
           item.search = query.search;
@@ -64,11 +56,7 @@ export class ShoppingController {
 
         await this.shoppingService.save(items);
 
-        return {
-          amazon: amazon.data,
-          ebay: ebay.data,
-          //   aliExpres: aliExpres.data,
-        };
+        return { amazon: amazon, ebay: ebay.data };
       }
 
       return {
@@ -90,7 +78,7 @@ export class ShoppingController {
     try {
       const amazon = await axios({
         method: 'post',
-        url: 'http://127.0.0.1:4500/amazon-scrape',
+        url: 'http://localhost:4500/amazon-scrape',
         headers: {
           accept: 'application/json',
         },
@@ -99,7 +87,7 @@ export class ShoppingController {
 
       const ebay = await axios({
         method: 'post',
-        url: 'http://127.0.0.1:4500/ebay-scrape',
+        url: 'http://localhost:4500/ebay-scrape',
         headers: {
           accept: 'application/json',
         },
@@ -135,7 +123,7 @@ export class ShoppingController {
     return (
       await axios({
         method: 'post',
-        url: 'http://127.0.0.1:4500/aliexpress-scrape',
+        url: 'http://localhost:4500/aliexpress-scrape',
         headers: {
           accept: 'application/json',
         },

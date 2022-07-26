@@ -1,19 +1,21 @@
 version: '3.8'
-services: 
+services:
   db:
     image: 'postgres:14.1-alpine'
     restart: always
-
     ports:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres_scrape
       POSTGRES_USER: postgres
-  
+
+
   api:
     depends_on:
       - db
+      - job-scrape
+      - shopping
     build:
       context: ./back-end
       dockerfile: Dockerfile
@@ -30,15 +32,15 @@ services:
     ports:
       - 3001:3001
 
+
   job-scrape:
     image: python:3.8
     build:
       context: ./job
       dockerfile: Dockerfile
     ports:
-      - "4000:4000"
-    expose:
-      - "4000"
+      - 4000:4000
+
 
   shopping:
     image: python:3.9
@@ -48,9 +50,8 @@ services:
       context: ./onlineShopping
       dockerfile: Dockerfile
     ports:
-      - "4500:4500"
-    expose:
-      - "4500"
+      - 4500:4500
+
 
   my-app:
     build:
@@ -59,5 +60,4 @@ services:
     depends_on:
       - shopping
     ports:
-      - '3000:3000'
-
+      - 3000:3000
