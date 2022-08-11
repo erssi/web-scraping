@@ -1,19 +1,26 @@
-import { Column, Entity } from "typeorm";
-import { BasicEntity } from "./basic.entity";
+import { Column, Entity } from 'typeorm';
+import { BasicEntity } from './basic.entity';
 
 @Entity('user')
 export class User extends BasicEntity {
+  @Column()
+  name: string;
 
-    @Column()
-    email: string;
+  @Column()
+  lastName: string;
 
-    @Column()
-    password: string;
+  @Column()
+  email: string;
 
-    @Column()
-    name: string;
+  @Column()
+  address: string;
 
-    @Column()
-    salt: string;
+  @Column()
+  city: string;
 
+  @Column()
+  password: string;
+
+  @Column()
+  salt: string;
 }

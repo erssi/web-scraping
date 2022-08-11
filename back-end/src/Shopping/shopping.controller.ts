@@ -25,23 +25,26 @@ export class ShoppingController {
         foundItems?.length === 0 ||
         foundItems[0]?.createdAt.getDate() <= new Date().getDate() - 2
       ) {
-        const amazon = await axios({
-          method: 'post',
-          url: 'http://localhost:4500/amazon-scrape',
-          headers: {
-            accept: 'application/json',
-          },
-          data: { search: query.search },
-        });
-
-        const ebay = await axios({
-          method: 'post',
-          url: 'http://localhost:4500/ebay-scrape',
-          headers: {
-            accept: 'application/json',
-          },
-          data: { search: query.search },
-        });
+        const [amazon, ebay] = await Promise.all([
+          await axios.post(
+            'http://localhost:4500/amazon-scrape',
+            { search: query.search },
+            {
+              headers: {
+                accept: 'application/json',
+              },
+            },
+          ),
+          await axios.post(
+            'http://localhost:4500/ebay-scrape',
+            { search: query.search },
+            {
+              headers: {
+                accept: 'application/json',
+              },
+            },
+          ),
+        ]);
 
         items.push(...amazon.data);
         items.push(...ebay.data);
@@ -50,13 +53,9 @@ export class ShoppingController {
           item.search = query.search;
         });
 
-        if (foundItems?.length > 0) {
-          await this.shoppingService.save(items);
-        }
-
         await this.shoppingService.save(items);
 
-        return { amazon: amazon, ebay: ebay.data };
+        return { amazon: amazon.data, ebay: ebay.data };
       }
 
       return {
@@ -64,9 +63,6 @@ export class ShoppingController {
           (item) => item.type === ShoppingWebsite.AMAZON,
         ),
         ebay: foundItems.filter((item) => item.type === ShoppingWebsite.EBAY),
-        aliExpres: foundItems.filter(
-          (item) => item.type === ShoppingWebsite.ALIEXPRESS,
-        ),
       };
     } catch (error) {
       return new Error('Something went wrong');
@@ -76,23 +72,26 @@ export class ShoppingController {
   @Get('/search')
   async searchAll(@Query() query: SearchShopDto) {
     try {
-      const amazon = await axios({
-        method: 'post',
-        url: 'http://localhost:4500/amazon-scrape',
-        headers: {
-          accept: 'application/json',
-        },
-        data: { search: query.search },
-      });
-
-      const ebay = await axios({
-        method: 'post',
-        url: 'http://localhost:4500/ebay-scrape',
-        headers: {
-          accept: 'application/json',
-        },
-        data: { search: query.search },
-      });
+      const [amazon, ebay] = await Promise.all([
+        await axios.post(
+          'http://localhost:4500/amazon-scrape',
+          { search: query.search },
+          {
+            headers: {
+              accept: 'application/json',
+            },
+          },
+        ),
+        await axios.post(
+          'http://localhost:4500/ebay-scrape',
+          { search: query.search },
+          {
+            headers: {
+              accept: 'application/json',
+            },
+          },
+        ),
+      ]);
 
       const shopping = [];
       shopping.push(...amazon.data);
@@ -109,7 +108,7 @@ export class ShoppingController {
       if (foundItems?.length === 0) {
         await this.shoppingService.save(shopping);
       } else {
-        await this.shoppingService.delete(shopping);
+        await this.shoppingService.delete(foundItems);
         await this.shoppingService.save(shopping);
       }
       return { amazon: amazon.data, ebay: ebay.data };
@@ -121,14 +120,16 @@ export class ShoppingController {
   @Get('/test')
   async test(@Query() query: SearchShopDto) {
     return (
-      await axios({
-        method: 'post',
-        url: 'http://localhost:4500/aliexpress-scrape',
-        headers: {
-          accept: 'application/json',
+      await axios.post(
+        'http://localhost:4500/aliexpress-scrape',
+
+        { search: query.search },
+        {
+          headers: {
+            accept: 'application/json',
+          },
         },
-        data: { search: query.search },
-      })
+      )
     ).data;
   }
 }
