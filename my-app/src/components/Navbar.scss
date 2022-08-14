@@ -1,13 +1,15 @@
 .site-layout-content {
   width: 100%;
-  overflow: auto !important;
-  height: 93.5vh;
+  // overflow-y: scroll !important;
+  padding-bottom: 20px;
+  height: 93.5vh !important;
 }
 .ant-layout-content {
-  overflow: auto !important;
+  overflow-y: scroll !important;
   height: 93.5vh;
-  padding: 0 !important;
+  padding-bottom: 20px;
 }
+
 .logo {
   color: #fff;
   font-weight: bold;

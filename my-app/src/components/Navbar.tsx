@@ -1,10 +1,10 @@
-import { Button, Dropdown, Layout, Menu, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import './Navbar.scss';
-import { onLogout, setToken } from '../store/auth/authSlice';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Layout, Menu, Space } from "antd";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import "./Navbar.scss";
+import { onLogout, setToken } from "../store/auth/authSlice";
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
 interface Props {
   children: React.ReactNode;
 }
@@ -24,7 +24,7 @@ const Navbar = ({ children }: Props): JSX.Element => {
   const onLogoutUser = () => {
     dispatch(setToken(null));
     dispatch(onLogout());
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
     setloggedIn(false);
   };
 
@@ -37,17 +37,17 @@ const Navbar = ({ children }: Props): JSX.Element => {
     <Menu
       items={[
         {
-          label: <Link to={'/my-profile'}>Profile</Link>,
-          key: '1',
+          label: <Link to={"/my-profile"}>Profile</Link>,
+          key: "1",
           icon: <UserOutlined />,
         },
         {
           label: (
-            <Link onClick={onLogoutUser} to={'/'}>
+            <Link onClick={onLogoutUser} to={"/"}>
               Logout
             </Link>
           ),
-          key: '2',
+          key: "2",
         },
       ]}
     />
@@ -55,24 +55,24 @@ const Navbar = ({ children }: Props): JSX.Element => {
 
   const navbarItems = (
     <Menu
-      className='navbar__header--menu'
-      theme='dark'
+      className="navbar__header--menu"
+      theme="dark"
       activeKey={location.pathname}
     >
-      <Menu.Item key={'/'}>
-        <Link to={'/'}>Home</Link>
+      <Menu.Item key={"/"}>
+        <Link to={"/"}>Home</Link>
       </Menu.Item>
 
-      <Menu.Item key={'/contact'}>
-        <Link to={'/contact'}>Contact Us</Link>
+      <Menu.Item key={"/contact"}>
+        <Link to={"/contact"}>Contact Us</Link>
       </Menu.Item>
       {!loggedIn && (
-        <Menu.Item key={'/sign-in'}>
-          <Link to={'/sign-in'}>Sign In</Link>
+        <Menu.Item key={"/sign-in"}>
+          <Link to={"/sign-in"}>Sign In</Link>
         </Menu.Item>
       )}
       {loggedIn && (
-        <Dropdown overlay={menu} className='navbar__dropdown'>
+        <Dropdown overlay={menu} className="navbar__dropdown">
           <Button>
             <Space>
               {authUser?.name}
@@ -85,16 +85,14 @@ const Navbar = ({ children }: Props): JSX.Element => {
   );
 
   return (
-    <Layout className='layout'>
-      <Header className='navbar__header'>
-        <div className='logo'>
+    <Layout className="layout">
+      <Header className="navbar__header">
+        <div className="logo">
           Ben<span>PijeDashesi</span>
         </div>
         {navbarItems}
       </Header>
-      <Content style={{ padding: '0 50px' }}>
-        <div className='site-layout-content'>{children}</div>
-      </Content>
+      <Content style={{ padding: "0" }}>{children}</Content>
     </Layout>
   );
 };
