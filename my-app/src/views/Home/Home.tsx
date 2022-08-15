@@ -1,36 +1,36 @@
-import { Button, Card, Select, Spin } from "antd";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { Button, Card, Select, Spin } from 'antd';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import "../../App.scss";
-import SearchButton from "../../components/SearchButton";
-import SearchShoppingItem from "../../components/SearchShoppingItem";
-import { openNotification } from "../../components/ToastNotifcation/Notification";
-import { ApiService } from "../../services/apiService";
-import { JobsItem, ShopingItem } from "../../types/general";
+import './Home.scss';
+import SearchButton from '../../components/SearchButton';
+import SearchShoppingItem from '../../components/SearchShoppingItem';
+import { openNotification } from '../../components/ToastNotifcation/Notification';
+import { ApiService } from '../../services/apiService';
+import { JobsItem, ShopingItem } from '../../types/general';
 
 function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [items, setitems] = useState({
     amazon: [] as ShopingItem[],
     ebay: [] as ShopingItem[],
   });
   const [isLoading, setIsLoading] = useState(false);
   const { Option } = Select;
-  const [dropdownValue, setDropdownValue] = useState("Shopping");
+  const [dropdownValue, setDropdownValue] = useState('Shopping');
   const [jobs, setJobs] = useState({
     flexjobs: [] as JobsItem[],
     indeed: [] as JobsItem[],
   });
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState('');
   const accessToken = useSelector((state: any) => state.auth.token);
 
   const benRakia = async () => {
     setIsLoading(true);
     try {
-      if (dropdownValue === "Shopping") {
+      if (dropdownValue === 'Shopping') {
         if (!searchQuery) {
-          return openNotification("Error", "Please enter a search query !");
+          return openNotification('Error', 'Please enter a search query !');
         }
         let res: any = null;
 
@@ -45,8 +45,8 @@ function Home() {
       } else {
         if (!searchQuery || !location) {
           return openNotification(
-            "Error",
-            "Please enter a search query and location to search for jobs"
+            'Error',
+            'Please enter a search query and location to search for jobs'
           );
         }
         let res: any = null;
@@ -77,7 +77,7 @@ function Home() {
     setLocation(e.target.value);
   };
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       benRakia();
     }
   };
@@ -91,122 +91,123 @@ function Home() {
   const renderSelect = () => {
     return (
       <>
-        {" "}
+        {' '}
         <Select
-          defaultValue="Shopping"
+          defaultValue='Shopping'
           style={{ width: 120 }}
           onChange={handleChange}
         >
-          <Option value="Shopping">Shopping</Option>
-          <Option value="Jobs">Jobs</Option>
+          <Option value='Shopping'>Shopping</Option>
+          <Option value='Jobs'>Jobs</Option>
         </Select>
       </>
     );
   };
 
   return (
-    <div className="opa">
-      <div className="search">
-        {" "}
-        <h1>Ben Pijedashesi</h1>
-        <div className="search-box">
-          {renderSelect()}{" "}
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "5px",
-            }}
-          >
-            <span style={{ whiteSpace: "nowrap", margin: "0 5px" }}>
-              {dropdownValue === "Shopping"
-                ? "Shopping Item :"
-                : " Job Title :"}
-            </span>
-            <SearchButton onChange={onChange} onKeyPress={onKeyPress} />
-          </div>
-          {dropdownValue === "Jobs" && (
+    <div className='home'>
+      <div className='home-search'>
+        <div className='home-search-fixed'>
+          <h1>Ben Pijedashesi</h1>
+          <div className='home-search__box'>
+            {renderSelect()}{' '}
             <div
               style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "5px",
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '5px',
               }}
             >
-              <span>Location: </span>{" "}
-              <SearchButton onChange={onHandleLocation} />
+              <span style={{ whiteSpace: 'nowrap', margin: '0 5px' }}>
+                {dropdownValue === 'Shopping'
+                  ? 'Shopping Item :'
+                  : ' Job Title :'}
+              </span>
+              <SearchButton onChange={onChange} onKeyPress={onKeyPress} />
             </div>
-          )}
-          <Button className="search-box__btn" onClick={benRakia}>
-            Serach
-          </Button>
+            {dropdownValue === 'Jobs' && (
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '5px',
+                }}
+              >
+                <span>Location: </span>{' '}
+                <SearchButton onChange={onHandleLocation} />
+              </div>
+            )}
+            <Button className='search-box__btn' onClick={benRakia}>
+              Serach
+            </Button>
+          </div>
         </div>
-      </div>{" "}
-      <div className="App">
+      </div>{' '}
+      <div className='home-container'>
         {isLoading ? (
-          <div className="loader">
+          <div className='loader'>
             <Spin />
           </div>
         ) : (
-          <div className="search-container">
-            {dropdownValue === "Shopping" && (
+          <div className='home-container__search-items'>
+            {dropdownValue === 'Shopping' && (
               <>
                 {items && (
                   <>
-                    <div className="search-container__left">
+                    <div className='home-container__search-items--left'>
                       {items?.amazon?.map(item => (
                         <SearchShoppingItem
                           {...item}
-                          shopType="amazon"
+                          shopType='amazon'
                           key={item.id}
                         />
-                      ))}{" "}
+                      ))}{' '}
                     </div>
-                    <div className="search-container__right">
+                    <div className='home-container__search-items--right'>
                       {items?.ebay?.map(item => (
                         <SearchShoppingItem
                           {...item}
-                          shopType="ebay"
+                          shopType='ebay'
                           key={item.id}
                         />
-                      ))}{" "}
+                      ))}{' '}
                     </div>
                   </>
                 )}
               </>
             )}
 
-            {dropdownValue === "Jobs" && (
+            {dropdownValue === 'Jobs' && (
               <>
-                <div className="jobs">
+                <div className='home-container__search-items'>
                   {jobs?.flexjobs?.map((job: any) => (
-                    <Card className="search-shopping__card">
+                    <Card className='home-container__search-items--left'>
                       <h1>{job.title}</h1>
                       {job.company && <h3>{job.company}</h3>}
                       <span>{job.date} </span>
                       <br />
                       <span>Location : {job.location}</span>
                       <br />
-                      <a target={"_"} href={job.link}>
+                      <a target={'_'} href={job.link}>
                         Visit
                       </a>
                     </Card>
                   ))}
-                </div>{" "}
-                <div className="jobs">
+                </div>{' '}
+                <div className='jobs'>
                   {jobs?.indeed?.map((job: any) => (
-                    <Card className="search-shopping__card">
+                    <Card className='home-container__search-items--right'>
                       <h1>{job.title}</h1>
                       {job.company && <h3>{job.company}</h3>}
                       <span>{job.date} </span>
                       <br />
                       <span>Location : {job.location}</span>
                       <br />
-                      <a target={"_"} href={job.link}>
+                      <a target={'_'} href={job.link}>
                         Visit
                       </a>
                     </Card>

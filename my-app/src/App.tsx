@@ -16,6 +16,7 @@ import Contact from './views/Contact/Contact';
 import NotFound from './views/Error/NotFound';
 import Home from './views/Home/Home';
 import MyProfile from './views/User/MyProfile';
+import './App.scss';
 const App = () => {
   const token = useSelector((state: any) => state.auth.token);
   const dispatch = useDispatch();
