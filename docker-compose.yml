@@ -1,7 +1,7 @@
-version: "3.8"
+version: '3.8'
 services:
   db:
-    image: "postgres:14.1-alpine"
+    image: postgres:14.1-alpine
     restart: always
     ports:
       - 5432:5432
@@ -10,26 +10,26 @@ services:
       POSTGRES_DB: postgres_scrape
       POSTGRES_USER: postgres
 
-  # api:
-  #   depends_on:
-  #     - db
-  #     - job-scrape
-  #     - shopping
-  #   build:
-  #     context: ./back-end
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./back-end:/node_modules
-  #   environment:
-  #     TYPEORM_CONNECTION: postgresql
-  #     TYPEORM_HOST: db
-  #     TYPEORM_PORT: 5432
-  #     TYPEORM_USERNAME: postgres
-  #     TYPEORM_PASSWORD: postgres
-  #     TYPEORM_DATABASE: postgres
-  #     TYPEORM_SYNCHRONIZE: 'true'
-  #   ports:
-  #     - 3001:3001
+  api:
+    depends_on:
+      - db
+      - job-scrape
+      - shopping
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    volumes:
+      - ./back-end:/node_modules
+    environment:
+      TYPEORM_CONNECTION: postgresql
+      TYPEORM_HOST: db
+      TYPEORM_PORT: 5432
+      TYPEORM_USERNAME: postgres
+      TYPEORM_PASSWORD: postgres
+      TYPEORM_DATABASE: postgres_scrape
+      TYPEORM_SYNCHRONIZE: 'true'
+    ports:
+      - 3001:3001
 
   job-scrape:
     image: python:3.8
@@ -49,11 +49,11 @@ services:
     ports:
       - 4500:4500
 
-  # my-app:
-  #   build:
-  #     context: ./my-app
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - shopping
-  #   ports:
-  #     - 3000:3000
+  my-app:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    depends_on:
+      - shopping
+    ports:
+      - 3000:3000
