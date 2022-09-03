@@ -141,7 +141,6 @@ def extract_amazon_record(item):
     return {'description': description, 'image': image, 'price': price, 'rating': rating, 'url': url, 'type': 'amazon'}
 
 def extract_ebay_record(item, image):
-
     #description and url
     try:
         #atag
@@ -150,12 +149,12 @@ def extract_ebay_record(item, image):
         atag = 'N/A'
     
     try:
-        description = atag.h3.text.strip()
+        description = atag.find('div', 's-item__title').span.text
     except AttributeError:
         description = 'N/A'
 
     try:
-        url = 'https://www.ebay.com/' + atag.get('href')
+        url =  atag.get('href')
     except AttributeError:
 
         url = 'N/A'
@@ -163,14 +162,14 @@ def extract_ebay_record(item, image):
     try:
         #price
         price_grand_parent = item.find('div', {'class': 's-item__details clearfix'})
-        price_parent = price_grand_parent.find('div', {'class':'s-item__detail s-item__detail--primary'})
+        price_parent = price_grand_parent.find('div', {'class':'s-item__detailundefined s-item__detail--primary'})
         price = price_parent.find('span', {'class':'s-item__price'}).text
     except AttributeError:
         price = 'N/A'
 
     try:
         #raiting
-        rating = item.i.text
+        rating = item.find('div', {'class': 's-item__reviews'}).span.text
     except AttributeError:
         rating = 'N/A'
 
