@@ -9,6 +9,7 @@ import { ShoppingModule } from './Shopping/shopping.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
+import { FavoriteModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BookmarkModule } from './bookmark/bookmark.module';
     AuthModule,
     MailModule,
     BookmarkModule,
+    FavoriteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

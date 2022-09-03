@@ -1,9 +1,13 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BasicEntity } from './basic.entity';
 import { Bookmark } from './bookmark.entity';
+import { Favorites } from './favorites.entity';
 
 @Entity('user')
 export class User extends BasicEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column()
   name: string;
 
@@ -27,4 +31,7 @@ export class User extends BasicEntity {
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmarks: Bookmark[];
+
+  @OneToMany(() => Favorites, (favorites) => favorites.user)
+  favorites: Favorites[];
 }
