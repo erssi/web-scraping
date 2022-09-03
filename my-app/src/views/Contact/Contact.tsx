@@ -46,8 +46,8 @@ const Contact = () => {
         }}
       >
         <Form.Item // Form Item (First Name)
-          label='First Name'
-          name='firstName'
+          label='Name'
+          name='name'
           tooltip='This is a required field'
           rules={[
             {
@@ -58,19 +58,7 @@ const Contact = () => {
         >
           <Input placeholder='First Name' />
         </Form.Item>
-        <Form.Item // Form Item (Last Name)
-          label='Last Name'
-          name='lastName'
-          tooltip='This is a required field'
-          rules={[
-            {
-              required: true,
-              message: 'Please enter your last name!',
-            },
-          ]}
-        >
-          <Input placeholder='Last Name' />
-        </Form.Item>
+
         <Form.Item // Form Item (Email)
           label='Email'
           name='email'

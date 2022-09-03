@@ -1,0 +1,17 @@
+.shopping-item {
+  &__type {
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+
+  &__content {
+    display: flex;
+    gap: 20px;
+  }
+  &__footer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
