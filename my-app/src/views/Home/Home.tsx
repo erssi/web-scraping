@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import './Home.scss';
 import SearchButton from '../../components/SearchButton';
-import SearchShoppingItem from '../../components/SearchShoppingItem';
+import ShoppingItem from '../../components/ShoppingItem/ShoppingItem';
 import { openNotification } from '../../components/ToastNotifcation/Notification';
 import { ApiService } from '../../services/apiService';
 import { JobsItem, ShopingItem } from '../../types/general';
@@ -25,7 +25,7 @@ function Home() {
   const [location, setLocation] = useState('');
   const accessToken = useSelector((state: any) => state.auth.token);
 
-  const benRakia = async () => {
+  const onSearchItem = async () => {
     setIsLoading(true);
     try {
       if (dropdownValue === 'Shopping') {
@@ -78,7 +78,7 @@ function Home() {
   };
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      benRakia();
+      onSearchItem();
     }
   };
 
@@ -94,7 +94,7 @@ function Home() {
         {' '}
         <Select
           defaultValue='Shopping'
-          style={{ width: 120 }}
+          className='home__select'
           onChange={handleChange}
         >
           <Option value='Shopping'>Shopping</Option>
@@ -106,25 +106,25 @@ function Home() {
 
   return (
     <div className='home'>
-      <div className='home-search'>
-        <div className='home-search-fixed'>
-          <h1>Ben Pijedashesi</h1>
-          <div className='home-search__box'>
+      <div className='home__search'>
+        <div className='home__search-fixed'>
+          <div className='home__search--box'>
             {renderSelect()}{' '}
             <div
               style={{
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'center',
+                flexDirection: 'column',
                 alignItems: 'center',
-                gap: '5px',
+                gap: '10px',
               }}
             >
-              <span style={{ whiteSpace: 'nowrap', margin: '0 5px' }}>
+              <p className='u__mt--lg'>
                 {dropdownValue === 'Shopping'
                   ? 'Shopping Item :'
                   : ' Job Title :'}
-              </span>
+              </p>
               <SearchButton onChange={onChange} onKeyPress={onKeyPress} />
             </div>
             {dropdownValue === 'Jobs' && (
@@ -133,16 +133,20 @@ function Home() {
                   width: '100%',
                   display: 'flex',
                   justifyContent: 'center',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  gap: '5px',
+                  gap: '10px',
                 }}
               >
-                <span>Location: </span>{' '}
+                <span className='u__mt--lg'>Location: </span>{' '}
                 <SearchButton onChange={onHandleLocation} />
               </div>
             )}
-            <Button className='search-box__btn' onClick={benRakia}>
-              Serach
+            <Button
+              className='home__search--btn u__mt--lg'
+              onClick={onSearchItem}
+            >
+              Search
             </Button>
           </div>
         </div>
@@ -153,27 +157,23 @@ function Home() {
             <Spin />
           </div>
         ) : (
-          <div className='home-container__search-items'>
+          <div className='home__container'>
             {dropdownValue === 'Shopping' && (
               <>
                 {items && (
                   <>
-                    <div className='home-container__search-items--left'>
+                    <div className='home__container--item'>
                       {items?.amazon?.map(item => (
-                        <SearchShoppingItem
+                        <ShoppingItem
                           {...item}
                           shopType='amazon'
                           key={item.id}
                         />
                       ))}{' '}
                     </div>
-                    <div className='home-container__search-items--right'>
+                    <div className='home__container--item'>
                       {items?.ebay?.map(item => (
-                        <SearchShoppingItem
-                          {...item}
-                          shopType='ebay'
-                          key={item.id}
-                        />
+                        <ShoppingItem {...item} shopType='ebay' key={item.id} />
                       ))}{' '}
                     </div>
                   </>
@@ -183,9 +183,9 @@ function Home() {
 
             {dropdownValue === 'Jobs' && (
               <>
-                <div className='home-container__search-items'>
+                <div className='home__search-items'>
                   {jobs?.flexjobs?.map((job: any) => (
-                    <Card className='home-container__search-items--left'>
+                    <Card className='home__search-items--left'>
                       <h1>{job.title}</h1>
                       {job.company && <h3>{job.company}</h3>}
                       <span>{job.date} </span>
