@@ -4,15 +4,20 @@ import { ShoppingWebsite } from 'src/entities/shopping.entity';
 import { SearchShopDto } from './dto/search.dto';
 import { ShoppingService } from './shopping.service';
 import axios from 'axios';
+import { BookmarkService } from 'src/bookmark/bookmark.service';
+import { CurrentUser } from 'src/user/decorators/currentUser.decorator';
 
 @Controller('shopping')
 export class ShoppingController {
   @Inject(ShoppingService)
   public shoppingService: ShoppingService;
 
+  @Inject(BookmarkService)
+  public bookmarkService: BookmarkService;
+
   @UseGuards(JwtAuthGuard)
   @Get('/search-login')
-  async search(@Query() query: SearchShopDto) {
+  async search(@Query() query: SearchShopDto, @CurrentUser() user) {
     try {
       const items = [];
 
@@ -54,6 +59,8 @@ export class ShoppingController {
         });
 
         await this.shoppingService.save(items);
+
+        await this.bookmarkService.save({ user, item: query.search });
 
         return { amazon: amazon.data, ebay: ebay.data };
       }

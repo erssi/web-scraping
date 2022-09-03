@@ -3,15 +3,20 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { SearchJobDto } from './dto/searchJob.dto';
 import { JobService } from './job.service';
 import axios from 'axios';
+import { BookmarkService } from 'src/bookmark/bookmark.service';
+import { CurrentUser } from 'src/user/decorators/currentUser.decorator';
 
 @Controller('job')
 export class JobController {
   @Inject(JobService)
   public jobService: JobService;
 
+  @Inject(BookmarkService)
+  public bookmarkService: BookmarkService;
+
   @UseGuards(JwtAuthGuard)
   @Get('/search-login')
-  async search(@Query() query: SearchJobDto) {
+  async search(@Query() query: SearchJobDto, @CurrentUser() user) {
     try {
       const jobs = [];
 
@@ -62,6 +67,11 @@ export class JobController {
         }
 
         await this.jobService.save(jobs);
+        await this.bookmarkService.save({
+          user,
+          item: query.jobTitle,
+          location: query.location,
+        });
         return { indeed: indeed.data, flexjobs: flexjobs.data };
       }
 
