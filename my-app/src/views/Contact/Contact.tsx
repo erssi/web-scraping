@@ -2,11 +2,16 @@ import './Contact.scss';
 import { Button, Form, Input, Typography } from 'antd';
 import { openNotification } from '../../components/ToastNotifcation/Notification';
 import { formContact } from '../../types/general';
+import { ApiService } from '../../services/apiService';
+import { useNavigate } from 'react-router-dom';
 const Contact = () => {
   const { Title, Text } = Typography;
+  const navigate = useNavigate();
   const onFinish = async (values: formContact) => {
     try {
-      console.log(values);
+      ApiService.post('mail', values);
+      openNotification('Success', 'Your message has been sent !');
+      navigate('/');
     } catch (error: any) {
       openNotification('Error', error.message);
     }

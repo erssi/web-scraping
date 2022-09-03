@@ -67,6 +67,23 @@ function Home() {
     }
   };
 
+  const onSaveItem = async (item: ShopingItem) => {
+    try {
+      console.log(item);
+      const type = dropdownValue === 'Shopping' ? 'shopping' : 'job';
+
+      const body = {
+        id: item?.id,
+        type,
+      };
+
+      await ApiService.post('favorites/', body);
+      // openNotification('Success', 'Item saved successfully !');
+    } catch (error: any) {
+      openNotification('Error', error.message);
+    }
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSearchQuery(e.target.value);
@@ -166,6 +183,7 @@ function Home() {
                       {items?.amazon?.map(item => (
                         <ShoppingItem
                           {...item}
+                          onSave={() => onSaveItem(item)}
                           shopType='amazon'
                           key={item.id}
                         />
@@ -195,6 +213,7 @@ function Home() {
                       <a target={'_'} href={job.link}>
                         Visit
                       </a>
+                      <Button onClick={() => onSaveItem(job)}>Save</Button>
                     </Card>
                   ))}
                 </div>{' '}
@@ -210,6 +229,7 @@ function Home() {
                       <a target={'_'} href={job.link}>
                         Visit
                       </a>
+                      <Button onClick={() => onSaveItem(job)}>Save</Button>
                     </Card>
                   ))}
                 </div>

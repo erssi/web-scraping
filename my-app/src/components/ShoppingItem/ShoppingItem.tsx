@@ -1,4 +1,4 @@
-import { Card, Rate } from 'antd';
+import { Button, Card, Rate } from 'antd';
 import React from 'react';
 import './ShopingItem.scss';
 
@@ -11,6 +11,7 @@ interface Props {
   rating: string;
   url: string;
   shopType: string;
+  onSave?: any;
 }
 
 const SearchShoppingItem = ({
@@ -22,6 +23,7 @@ const SearchShoppingItem = ({
   rating,
   url,
   shopType,
+  onSave,
 }: Props) => {
   return (
     <React.Fragment key={id}>
@@ -59,6 +61,7 @@ const SearchShoppingItem = ({
               Visit
             </a>{' '}
           </div>
+          <Button onClick={onSave}>Save</Button>
         </Card>
       )}{' '}
     </React.Fragment>
