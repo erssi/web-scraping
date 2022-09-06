@@ -18,4 +18,10 @@ export class UserDto {
 
   @Expose()
   city: string;
+
+  @Expose()
+  profile: string;
+
+  @Expose()
+  cover: string;
 }

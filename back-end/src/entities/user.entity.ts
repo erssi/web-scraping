@@ -23,6 +23,12 @@ export class User extends BasicEntity {
   @Column()
   city: string;
 
+  @Column({ nullable: true })
+  profile: string;
+
+  @Column({ nullable: true })
+  cover: string;
+
   @Column()
   password: string;
 
