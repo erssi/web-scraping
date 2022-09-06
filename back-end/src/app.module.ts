@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { FavoriteModule } from './favorites/favorites.module';
+import { PhotoModule } from './photo/photo.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { FavoriteModule } from './favorites/favorites.module';
     MailModule,
     BookmarkModule,
     FavoriteModule,
+    PhotoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
