@@ -16,6 +16,7 @@ import { Serialize } from 'src/interceptor/serialize.interceptor';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
+var multer = require('multer');
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
@@ -37,10 +38,24 @@ export class UserController {
 
   @Serialize(UserDto)
   @Post('/profile')
-  @UseInterceptors(FileInterceptor('profile', { dest: './src/uploads' }))
+  @UseInterceptors(
+    FileInterceptor('profile', {
+      dest: './src/uploads',
+      storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, './public/uploads');
+        },
+        filename: function (req, file, cb) {
+          cb(null, `${Math.random() * 53254}${file.originalname}`);
+        },
+      }),
+    }),
+  )
   async uploadProfile(@UploadedFile() file, @CurrentUser() user) {
     if (file.fieldname === 'profile') {
-      await this.userService.update(user.id, { profile: file.path });
+      await this.userService.update(user.id, {
+        profile: `${file.filename}`,
+      });
       return await this.userService.getOne({ id: user.id });
     }
 
@@ -49,10 +64,24 @@ export class UserController {
 
   @Serialize(UserDto)
   @Post('/cover')
-  @UseInterceptors(FileInterceptor('cover', { dest: './src/uploads' }))
+  @UseInterceptors(
+    FileInterceptor('cover', {
+      dest: './public/uploads',
+      storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, './public/uploads');
+        },
+        filename: function (req, file, cb) {
+          cb(null, `${Math.random() * 53254}${file.originalname}`);
+        },
+      }),
+    }),
+  )
   async uploadCover(@UploadedFile() file, @CurrentUser() user) {
     if (file.fieldname === 'cover') {
-      await this.userService.update(user.id, { cover: file.path });
+      await this.userService.update(user.id, {
+        cover: `${file.filename}`,
+      });
       return await this.userService.getOne({ id: user.id });
     }
 
