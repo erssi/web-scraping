@@ -8,11 +8,24 @@
     padding: 20px;
     position: relative;
     &--cover {
+      &--relative {
+        position: relative;
+      }
       max-width: 1100px;
       height: 250px;
-      border-radius: 20px;
+      height: 380px;
+      width: 100%;
       background-size: cover !important;
       background-position: center !important;
+      background-repeat: no-repeat !important;
+      &--edit {
+        position: absolute;
+        right: 20px;
+        bottom: 30px;
+      }
+      .edit {
+        background: white;
+      }
     }
     &--profile-img {
       width: 110px;
