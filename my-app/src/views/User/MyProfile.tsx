@@ -5,6 +5,7 @@ import { Button, Rate } from 'antd';
 import { ApiService } from '../../services/apiService';
 import { EditFilled } from '@ant-design/icons';
 import KitImage from '../../components/KitImage/KitImage';
+import EditProfile from './EditProfile/EditProfile';
 
 const MyProfile = () => {
   const authUser = useSelector((state: any) => state.auth.user);
@@ -16,7 +17,7 @@ const MyProfile = () => {
   const [profileImg, setProfileImg] = useState();
   const [coverModal, setCoverModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-
+  const [settingsModal, setSettingsModal] = useState(false);
   const fetchFeed = async () => {
     try {
       const response: any = await ApiService.get(`favorites`);
@@ -162,7 +163,12 @@ const MyProfile = () => {
             <span>Email</span>
           </div>
         </div>
-        <button className='my-profile__card--header--btn'>Settings</button>
+        <button
+          className='my-profile__card--header--btn'
+          onClick={() => setSettingsModal(true)}
+        >
+          Settings
+        </button>
       </div>
 
       <div className='my-profile__content'>
@@ -222,6 +228,10 @@ const MyProfile = () => {
           </div>
         )}
       </div>
+      <EditProfile
+        onCancel={() => setSettingsModal(false)}
+        visible={settingsModal}
+      ></EditProfile>
     </div>
   );
 };
