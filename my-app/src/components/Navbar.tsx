@@ -88,7 +88,7 @@ const Navbar = ({ children }: Props): JSX.Element => {
     <Layout className="layout">
       <Header className="navbar__header">
         <div className="logo">
-          Ben<span>PijeDashesi</span>
+          <span>Finder</span>
         </div>
         {navbarItems}
       </Header>
