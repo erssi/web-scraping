@@ -29,3 +29,13 @@ body {
 .d-flex {
   display: flex;
 }
+
+
+.loader {
+  height: 100vh;
+  max-height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

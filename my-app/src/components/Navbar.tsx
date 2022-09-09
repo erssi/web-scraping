@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Navbar.scss";
 import { onLogout, setToken } from "../store/auth/authSlice";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import Logo from "../assets/images/Logo.svg";
 interface Props {
   children: React.ReactNode;
 }
@@ -87,9 +88,9 @@ const Navbar = ({ children }: Props): JSX.Element => {
   return (
     <Layout className="layout">
       <Header className="navbar__header">
-        <div className="logo">
-          <span>Finder</span>
-        </div>
+        <Link to={'/'}  className="logo">
+         <img src={Logo} alt="" /><span>Finder</span>
+        </Link>
         {navbarItems}
       </Header>
       <Content style={{ padding: "0" }}>{children}</Content>

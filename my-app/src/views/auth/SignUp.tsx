@@ -1,8 +1,11 @@
 import { Button, Form, Input } from "antd";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openNotification } from "../../components/ToastNotifcation/Notification";
 import { ApiService } from "../../services/apiService";
+import { LocalStorageService } from "../../services/LocalStorageService";
+import { setToken, setUserData } from "../../store/auth/authSlice";
 import { confirmPasswordValidator } from "./confirmPasswordValidator";
 import { formValidation } from "./constant";
 
@@ -10,13 +13,17 @@ const SignUp = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState<boolean>(false);
-
+const dispatch = useDispatch()
   const onFinish = async (values: any) => {
     try {
-      await ApiService.post("/auth/signup", values);
+   const res :any =   await ApiService.post("/auth/signup", values);
 
-      openNotification("Succes", "Account Succesfuly Added");
-      navigate("/");
+      LocalStorageService.setItem('accessToken', res?.accessToken);
+      dispatch(setToken(res?.accessToken));
+      const authMe = await ApiService.get('auth/me');
+      dispatch(setUserData(authMe));
+      openNotification('Succes', 'Succesfuly Registered');
+      navigate('/');
     } catch (error: any) {
       openNotification(`${error.status}`, `${error?.message}`);
     }
