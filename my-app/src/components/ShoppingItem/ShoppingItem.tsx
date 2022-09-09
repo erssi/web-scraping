@@ -1,5 +1,5 @@
 import { Button, Card, Rate } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import "./ShopingItem.scss";
 
 interface Props {
@@ -27,6 +27,8 @@ const SearchShoppingItem = ({
   onSave,
   isLoggedin,
 }: Props) => {
+  const [isSaved, setIsSaved] = useState(false);
+
   return (
     <React.Fragment key={id}>
       {" "}
@@ -63,7 +65,18 @@ const SearchShoppingItem = ({
             </a>{" "}
           </div>
           <br />
-          {isLoggedin && <Button onClick={onSave}>Save</Button>}
+          {isLoggedin && (
+            <Button
+              onClick={() => {
+                if (!isSaved) {
+                  onSave();
+                  setIsSaved(true);
+                }
+              }}
+            >
+              {isSaved ? "Saved" : "Save"}
+            </Button>
+          )}
         </Card>
       )}{" "}
     </React.Fragment>

@@ -28,19 +28,19 @@ function Home() {
   const onSearchItem = async () => {
     setIsLoading(true);
     try {
+      let res: any = null;
+
       if (dropdownValue === "Shopping") {
         if (!searchQuery) {
           return openNotification("Error", "Please enter a search query !");
         }
-        let res: any = null;
 
-        if (isLoggedIn) {
-          res = await ApiService.get(
-            `shopping/search-login?search=${searchQuery}`
-          );
-        } else {
-          res = await ApiService.get(`shopping/search?search=${searchQuery}`);
-        }
+        res = await ApiService.get(
+          `shopping/${
+            isLoggedIn ? "search-login" : "search"
+          }?search=${searchQuery}`
+        );
+
         setitems(res);
       } else {
         if (!searchQuery || !location) {
@@ -49,16 +49,13 @@ function Home() {
             "Please enter a search query and location to search for jobs"
           );
         }
-        let res: any = null;
-        if (isLoggedIn) {
-          res = await ApiService.get(
-            `job/search-login?jobTitle=${searchQuery}&location=${location}`
-          );
-        } else {
-          res = await ApiService.get(
-            `job/search?jobTitle=${searchQuery}&location=${location}`
-          );
-        }
+
+        res = await ApiService.get(
+          `job/${
+            isLoggedIn ? "search-login" : "search"
+          }?jobTitle=${searchQuery}&location=${location}`
+        );
+
         setJobs({ ...res });
       }
     } catch (error) {
@@ -78,7 +75,7 @@ function Home() {
       };
 
       await ApiService.post("favorites/", body);
-      openNotification('Success', 'Item saved successfully !');
+      openNotification("Success", "Item saved successfully !");
     } catch (error: any) {
       openNotification("Error", error.message);
     }

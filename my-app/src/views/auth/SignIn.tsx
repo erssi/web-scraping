@@ -49,7 +49,7 @@ export const SignIn = () => {
           </Button>
         </Form.Item>
         <div className={'u__mt--2xl login__form--paragraph'}>
-          Don't have an account?
+          Don't have an account? <br />
           <Button
             children={'Sign Up'}
             className={'u__p'}

@@ -13,17 +13,18 @@ const SignUp = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState<boolean>(false);
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
   const onFinish = async (values: any) => {
     try {
-   const res :any =   await ApiService.post("/auth/signup", values);
+      const res: any = await ApiService.post("/auth/signup", values);
 
-      LocalStorageService.setItem('accessToken', res?.accessToken);
+      LocalStorageService.setItem("accessToken", res?.accessToken);
       dispatch(setToken(res?.accessToken));
-      const authMe = await ApiService.get('auth/me');
+      const authMe = await ApiService.get("auth/me");
       dispatch(setUserData(authMe));
-      openNotification('Succes', 'Succesfuly Registered');
-      navigate('/');
+      openNotification("Succes", "Succesfuly Registered");
+      navigate("/");
     } catch (error: any) {
       openNotification(`${error.status}`, `${error?.message}`);
     }
@@ -146,7 +147,7 @@ const dispatch = useDispatch()
                   />
                 </Form.Item>
                 <div className={"u__mt--2xl login__form--paragraph"}>
-                  Already have an account?
+                  Already have an account? <br />
                   <Button
                     children={"Login"}
                     className={"u__p"}
