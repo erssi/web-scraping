@@ -162,7 +162,7 @@ def extract_ebay_record(item, image):
     try:
         #price
         price_grand_parent = item.find('div', {'class': 's-item__details clearfix'})
-        price_parent = price_grand_parent.find('div', {'class':'s-item__detailundefined s-item__detail--primary'})
+        price_parent = price_grand_parent.find('div', {'class':'s-item__detail s-item__detail--primary'})
         price = price_parent.find('span', {'class':'s-item__price'}).text
     except AttributeError:
         price = 'N/A'
